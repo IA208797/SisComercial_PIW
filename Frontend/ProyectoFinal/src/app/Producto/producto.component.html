@@ -1,0 +1,220 @@
+<section class="container mt-5">
+
+  <h1 class="mb-3">
+    Gestion de Productos
+  </h1>
+
+  <p class="text-muted mb-4">
+    Desde este apartado podras registrar, editar y eliminar los productos de la tienda
+  </p>
+
+  <form class="card p-4 shadow-sm">
+
+    <div class="mb-3">
+      <label class="form-label">Nombre del producto</label>
+
+      <input
+        type="text"
+        class="form-control"
+        maxlength="50"
+        [value]="nombre()"
+        (input)="nombre.set($any($event.target).value)"
+        placeholder="Ejemplo: Hamburguesa Clásica">
+
+      @if(nombreError()){
+        <small class="text-danger">{{ nombreError() }}</small>
+      }
+
+    </div>
+
+    <div class="mb-3">
+
+      <label class="form-label">Descripcion</label>
+
+      <textarea
+        rows="3"
+        maxlength="200"
+        class="form-control"
+        [value]="descripcion()"
+        (input)="descripcion.set($any($event.target).value)"
+        placeholder="Describe el producto..."></textarea>
+
+      @if(descripcionError()){
+        <small class="text-danger">{{ descripcionError() }}</small>
+      }
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-6 mb-3">
+
+        <label class="form-label">Precio</label>
+
+        <input
+          type="number"
+          class="form-control"
+          [value]="precio()"
+          (input)="precio.set($any($event.target).value)"
+          placeholder="0">
+
+        @if(precioError()){
+          <small class="text-danger">{{ precioError() }}</small>
+        }
+
+      </div>
+
+      <div class="col-md-6 mb-3">
+
+        <label class="form-label">Stock</label>
+
+        <input
+          type="number"
+          class="form-control"
+          [value]="stock()"
+          (input)="stock.set($any($event.target).value)"
+          placeholder="0">
+
+        @if(stockError()){
+          <small class="text-danger">{{ stockError() }}</small>
+        }
+
+      </div>
+
+    </div>
+
+    <div class="mb-4">
+
+      <label class="form-label">Categoria</label>
+
+      <input
+        type="text"
+        class="form-control"
+        maxlength="40"
+        [value]="categoria()"
+        (input)="categoria.set($any($event.target).value)"
+        placeholder="Ejemplo: Hamburguesas">
+
+      @if(categoriaError()){
+        <small class="text-danger">{{ categoriaError() }}</small>
+      }
+
+    </div>
+
+    <div class="d-flex gap-2">
+
+      <button
+        type="button"
+        class="btn btn-success"
+        [disabled]="!formularioValido()"
+        (click)="guardarProducto()">
+
+        {{ productoEditandoId() ? 'Actualizar Producto' : 'Guardar Producto' }}
+
+      </button>
+
+      @if(productoEditandoId()){
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="limpiarFormulario()">
+
+          Cancelar edicion
+
+        </button>
+
+      }
+
+    </div>
+
+  </form>
+
+  <div class="card mt-5 shadow-sm">
+
+    <div class="card-header">
+
+      <h4 class="mb-0">
+        Productos Registrados
+      </h4>
+
+    </div>
+
+    <div class="card-body">
+
+      @if(productos().length === 0){
+
+        <p class="text-muted">
+          No hay productos registrados.
+        </p>
+
+      } @else {
+
+        <table class="table table-bordered table-hover align-middle">
+
+          <thead>
+
+            <tr>
+
+              <th>Nombre</th>
+              <th>Descripcion</th>
+              <th>Precio</th>
+              <th>Stock</th>
+              <th>Categoria</th>
+              <th style="width:170px;">Acciones</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            @for(producto of productos(); track producto._id){
+
+              <tr>
+
+                <td>{{ producto.nombre }}</td>
+
+                <td>{{ producto.descripcion }}</td>
+
+                <td>${{ producto.precio }}</td>
+
+                <td>{{ producto.stock }}</td>
+
+                <td>{{ producto.categoria }}</td>
+
+                <td>
+
+                  <button
+                    class="btn btn-warning btn-sm me-2"
+                    (click)="editarProducto(producto)">
+
+                    Editar
+
+                  </button>
+
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="eliminarProducto(producto._id)">
+
+                    Eliminar
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      }
+
+    </div>
+
+  </div>
+
+</section>
