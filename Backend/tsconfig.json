@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",                                  /* Versión moderna de JS */
+    "module": "CommonJS",                                /* El sistema de módulos que entiende Node por defecto */
+    "moduleResolution": "node",                          /* Le dice a TS cómo buscar tus importaciones */
+    "rootDir": "./src",                                  /* Dónde está tu código fuente */
+    "outDir": "./dist",                                  /* Dónde guardará el código compilado (para producción) */
+    "esModuleInterop": true,                             /* Permite importar paquetes como Express sin errores */
+    "forceConsistentCasingInFileNames": true,            /* Evita problemas de mayúsculas/minúsculas */
+    "strict": true,                                      /* Activa las revisiones de seguridad de TS */
+    "skipLibCheck": true,                                 /* Ignora errores internos de las librerías de node_modules */
+    "ignoreDeprecations": "6.0"
+  },
+  "include": ["src/**/*"],                               /* Solo revisa la carpeta src */
+  "exclude": ["node_modules", "**/*.spec.ts"]            /* Ignora dependencias */
+}
