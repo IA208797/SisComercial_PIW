@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 const puerto = 4000;
 
-const MONGO_URL = 'mongodb://espinosarichk_db_user:lUDNuC7QRgOYj4he@ac-kl0961k-shard-00-00.cunq1mz.mongodb.net:27017,ac-kl0961k-shard-00-01.cunq1mz.mongodb.net:27017,ac-kl0961k-shard-00-02.cunq1mz.mongodb.net:27017/Prueba2?ssl=true&replicaSet=atlas-3ahg0a-shard-0&authSource=admin&appName=HeinkelLion';
+const MONGO_URL = ;
 
 //mis petic
 app.use(cors());
