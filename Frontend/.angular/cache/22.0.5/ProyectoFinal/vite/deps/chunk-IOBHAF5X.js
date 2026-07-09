@@ -2745,12 +2745,12 @@ var HttpResourceImpl = class extends ResourceImpl {
 };
 
 export {
-  parseCookieValue,
   getDOM,
   setRootDomAdapter,
   DomAdapter,
   PlatformLocation,
   LOCATION_INITIALIZED,
+  parseCookieValue,
   HttpHeaders,
   HttpContextToken,
   HttpContext,
@@ -2793,4 +2793,4 @@ export {
   withHttpTransferCache,
   httpResource
 };
-//# sourceMappingURL=chunk-5VWOBYX7.js.map
+//# sourceMappingURL=chunk-IOBHAF5X.js.map

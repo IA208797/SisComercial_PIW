@@ -40,7 +40,7 @@ import {
   withRequestsMadeViaParent,
   withXhr,
   withXsrfConfiguration
-} from "./chunk-5VWOBYX7.js";
+} from "./chunk-IOBHAF5X.js";
 import "./chunk-4NPVZL5C.js";
 export {
   FetchBackend,
