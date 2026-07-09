@@ -1,10 +1,13 @@
 import { Component, computed, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Header } from '../shared/header/header';
+import { Footer } from '../shared/footer/footer';
 
 //Primera prueba de mi componente
 @Component({
   selector: 'app-producto',
   standalone: true,
+  imports: [Header, Footer],
   templateUrl: './producto.component.html',
 })
 

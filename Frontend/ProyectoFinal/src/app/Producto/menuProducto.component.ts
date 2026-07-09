@@ -1,10 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Header } from '../shared/header/header';
+import { Footer } from '../shared/footer/footer';
 
 //Otro componente ahueso
 @Component({
   selector: 'app-menu-producto',
   standalone: true,
+  imports: [Header, Footer],
   templateUrl: './menuProducto.component.html',
 }) 
 

@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+:root {
+  /* Define las fuentes para que Tailwind genere las clases font-roboto y font-merriweather */
+  --font-roboto: 'Roboto', sans-serif;
+  --font-merriweather: 'Merriweather', serif;
+}
+
+/* Opcional: Define Roboto como la fuente por defecto de todo el sitio */
+body {
+  font-family: var(--font-roboto);
+}
