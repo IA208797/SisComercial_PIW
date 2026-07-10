@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
-:root {
+@theme {
   /* Define las fuentes para que Tailwind genere las clases font-roboto y font-merriweather */
   --font-roboto: 'Roboto', sans-serif;
   --font-merriweather: 'Merriweather', serif;
+  --color-marca-azul: #0F766E;
+  --color-marca-turquesa: #2DD4BF;
+  --color-marca-hielo: #F8FAFC;
+  --color-marca-gris: #1E293B;
+  --color-marca-naranja: #F97316;
 }
 
 /* Opcional: Define Roboto como la fuente por defecto de todo el sitio */

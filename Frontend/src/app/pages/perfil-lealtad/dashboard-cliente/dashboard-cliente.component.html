@@ -1,0 +1,137 @@
+<div class="min-h-screen flex flex-col bg-marca-hielo text-marca-gris font-roboto">
+  <app-header></app-header>
+
+  <main class="grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
+
+    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 mb-10 max-w-2xl mx-auto text-center transition-all">
+      <h2 class="font-merriweather text-marca-azul font-bold text-3xl tracking-tight mb-2">
+        Portal de Clientes Frecuentes
+      </h2>
+      <p class="text-marca-gris/70 text-sm mb-8 font-medium">
+        Ingresa tu número de teléfono o ID de cliente para consultar tu estatus y beneficios.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <input 
+          #idInput 
+          type="text" 
+          placeholder="Ej. 6a474b11... o 6567328742" 
+          (keydown.enter)="buscarCuenta(idInput.value)"
+          class="w-full sm:w-2/3 px-5 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa transition-all text-marca-gris text-sm font-medium placeholder:text-gray-400"
+        />
+        <button 
+          (click)="buscarCuenta(idInput.value)" 
+          [disabled]="isLoading()"
+          class="bg-marca-naranja hover:opacity-90 text-white font-bold py-3.5 px-8 rounded-xl shadow-sm transition-all duration-200 focus:ring-2 focus:ring-marca-naranja/30 outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap active:scale-[0.98]">
+          {{ isLoading() ? 'Buscando...' : 'Buscar Cuenta' }}
+        </button>
+      </div>
+
+      @if (errorMensaje()) {
+        <div class="mt-5 p-4 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-bold flex items-center justify-center gap-2">
+          <span>⚠️</span> {{ errorMensaje() }}
+        </div>
+      }
+    </div>
+
+    @if (clienteData(); as cuenta) {
+      <div class="max-w-4xl mx-auto animate-fade-in">
+        
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200/60 pb-4">
+          <h3 class="text-xl font-bold text-marca-azul font-merriweather flex items-center gap-2">
+            <span>👤</span> Resumen de tu Cuenta
+          </h3>
+          <button 
+            class="text-marca-gris/60 hover:text-marca-azul hover:bg-marca-turquesa/10 px-4 py-2 rounded-lg text-sm font-bold transition-all" 
+            (click)="clienteData.set(null)">
+            Limpiar pantalla
+          </button>
+        </div>
+
+        <div class="bg-linear-to-br from-marca-azul to-marca-gris text-white rounded-3xl p-8 shadow-lg mb-10 relative overflow-hidden" [class]="cuenta.nivel_actual | lowercase">
+          <div class="absolute -right-20 -top-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+          
+          <div class="relative z-10 flex justify-between items-start mb-8">
+            <span class="text-white/70 font-bold tracking-wider uppercase text-xs">Nivel Actual</span>
+            <span class="bg-white/20 backdrop-blur-sm border border-white/10 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest text-white shadow-sm">
+              {{ cuenta.nivel_actual }}
+            </span>
+          </div>
+          
+          <div class="relative z-10 text-center mb-10">
+            <p class="text-white/70 font-medium text-sm uppercase tracking-widest mb-1">Puntos Disponibles</p>
+            <div class="flex items-baseline justify-center gap-2">
+              <p class="text-7xl font-merriweather font-bold tracking-tight text-marca-turquesa drop-shadow-sm">{{ cuenta.puntos_acumulados }}</p>
+              <p class="text-xl font-bold text-white/60">pts</p>
+            </div>
+          </div>
+
+          <div class="relative z-10 flex justify-between items-end pt-6 border-t border-white/10 text-sm">
+            <div>
+              <p class="text-white/50 text-xs uppercase tracking-wider mb-1 font-bold">Total de Visitas</p>
+              <p class="text-lg font-bold">{{ cuenta.total_visitas }}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-white/50 text-xs uppercase tracking-wider mb-1 font-bold">Última Actividad</p>
+              <p class="text-lg font-medium">{{ cuenta.fecha_ultima_actualizacion | date:'shortDate' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+          <div class="px-6 py-5 border-b border-gray-100 bg-gray-50/50">
+            <h3 class="font-bold text-base font-merriweather text-marca-azul flex items-center gap-2">
+              <span>📜</span> Historial de Movimientos
+            </h3>
+          </div>
+          
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
+              <thead>
+                <tr class="bg-gray-50/80 border-b border-gray-200/80 text-[11px] font-bold text-marca-gris/70 uppercase tracking-wider">
+                  <th class="px-6 py-4">Fecha</th>
+                  <th class="px-6 py-4">Descripción</th>
+                  <th class="px-6 py-4">Tipo</th>
+                  <th class="px-6 py-4 text-right">Puntos</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100 text-sm">
+                @for (movimiento of cuenta.historial_transacciones; track movimiento._id) {
+                  <tr class="hover:bg-marca-hielo transition-colors group">
+                    <td class="px-6 py-4 text-marca-gris/70 font-medium">
+                      {{ movimiento.fecha | date:'shortDate' }}
+                    </td>
+                    <td class="px-6 py-4 font-medium text-marca-gris">
+                      {{ movimiento.descripcion }}
+                    </td>
+                    <td class="px-6 py-4">
+                      <span 
+                        class="px-2.5 py-1 rounded-md text-xs font-bold border"
+                        [class]="movimiento.tipo === 'Acumulacion' ? 'px-2.5 py-1 rounded-md text-xs font-bold border bg-marca-turquesa/10 text-marca-azul border-marca-turquesa/30' : 'px-2.5 py-1 rounded-md text-xs font-bold border bg-marca-naranja/10 text-marca-naranja border-marca-naranja/30'">
+                        {{ movimiento.tipo }}
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-right font-bold text-lg"
+                        [class]="movimiento.tipo === 'Acumulacion' ? 'text-marca-azul' : 'text-marca-naranja'">
+                      {{ movimiento.tipo === 'Acumulacion' ? '+' : '' }}{{ movimiento.puntos_involucrados }}
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="4" class="px-6 py-12 text-center">
+                      <div class="text-4xl mb-3 opacity-30">📁</div>
+                      <p class="text-marca-gris/50 font-medium">Aún no hay transacciones en esta cuenta.</p>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    }
+
+  </main>
+  <app-footer></app-footer>
+</div>
