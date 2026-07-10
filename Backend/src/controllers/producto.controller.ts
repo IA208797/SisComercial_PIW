@@ -3,7 +3,7 @@ import { Producto } from '../models/producto.model';
 
 export const guardarProducto = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { nombre, descripcion, precio, stock, categoria } = req.body;
+    const { nombre, descripcion, precio, stock, categoria, imagen } = req.body;
 
     const nuevoProducto = new Producto({
       nombre,
@@ -11,6 +11,7 @@ export const guardarProducto = async (req: Request, res: Response): Promise<void
       precio,
       stock,
       categoria,
+      imagen,
     });
 
     await nuevoProducto.save();
@@ -38,11 +39,11 @@ export const obtenerProductos = async (req: Request, res: Response): Promise<voi
 export const actualizarProducto = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, precio, stock, categoria } = req.body;
+    const { nombre, descripcion, precio, stock, categoria, imagen } = req.body;
 
     const productoActualizado = await Producto.findByIdAndUpdate(
       id,
-      { nombre, descripcion, precio, stock, categoria },
+      { nombre, descripcion, precio, stock, categoria, imagen },
       { new: true }
     );
 
