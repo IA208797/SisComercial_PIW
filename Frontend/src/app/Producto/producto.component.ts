@@ -3,22 +3,18 @@ import { HttpClient } from '@angular/common/http';
 import { Header } from '../shared/header/header';
 import { Footer } from '../shared/footer/footer';
 
-//Primera prueba de mi componente
 @Component({
   selector: 'app-producto',
   standalone: true,
   imports: [Header, Footer],
   templateUrl: './producto.component.html',
 })
-
 export class ProductoComponent {
 
-  //Obtener mis datos guardadois
   constructor(private http: HttpClient) {
     this.obtenerProductos();
   }
 
-  //Prueba de edicion de productos
   productos = signal<any[]>([]);
   productoEditandoId = signal('');
 
@@ -27,12 +23,10 @@ export class ProductoComponent {
   precio = signal('');
   stock = signal('');
   categoria = signal('');
+  imagen = signal('');
 
-  //conexion
   apiUrl = 'http://localhost:4000/api/productos';
 
-  //validaciones robadas del form
-  //computed funcion de angular
   nombreError = computed(() => {
     const valor = this.nombre().trim();
 
@@ -78,19 +72,35 @@ export class ProductoComponent {
     return '';
   });
 
+  imagenError = computed(() => {
+    const valor = this.imagen().trim();
 
-  //por si acasooo
+    if (!valor) return '';
+
+    try {
+      const url = new URL(valor);
+
+      if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+        return 'La imagen debe usar una URL http o https.';
+      }
+
+      return '';
+    } catch {
+      return 'Escribe una URL válida para la imagen.';
+    }
+  });
+
   formularioValido = computed(() => {
     return (
       !this.nombreError() &&
       !this.descripcionError() &&
       !this.precioError() &&
       !this.stockError() &&
-      !this.categoriaError()
+      !this.categoriaError() &&
+      !this.imagenError()
     );
   });
 
-  //En caso de que la base de datos explote
   obtenerProductos() {
     this.http.get<any[]>(this.apiUrl).subscribe({
       next: (respuesta) => {
@@ -103,9 +113,6 @@ export class ProductoComponent {
     });
   }
 
-  //Funciones del CRUD
-
-  //Guardar
   guardarProducto() {
     if (!this.formularioValido()) return;
 
@@ -115,21 +122,23 @@ export class ProductoComponent {
       precio: Number(this.precio()),
       stock: Number(this.stock()),
       categoria: this.categoria().trim(),
+      imagen: this.imagen().trim(),
     };
 
-    //Actualizar en caso de de que exiata un produicto
     if (this.productoEditandoId()) {
-      this.http.put(`${this.apiUrl}/${this.productoEditandoId()}`, producto).subscribe({
-        next: () => {
-          alert('Producto actualizado correctamente');
-          this.limpiarFormulario();
-          this.obtenerProductos();
-        },
-        error: (error) => {
-          console.error('Error al actualizar producto:', error);
-          alert('Error al actualizar producto');
-        },
-      });
+      this.http
+        .put(`${this.apiUrl}/${this.productoEditandoId()}`, producto)
+        .subscribe({
+          next: () => {
+            alert('Producto actualizado correctamente');
+            this.limpiarFormulario();
+            this.obtenerProductos();
+          },
+          error: (error) => {
+            console.error('Error al actualizar producto:', error);
+            alert('Error al actualizar producto');
+          },
+        });
     } else {
       this.http.post(this.apiUrl, producto).subscribe({
         next: () => {
@@ -145,17 +154,16 @@ export class ProductoComponent {
     }
   }
 
-  //editar sin necesidad de guardar
   editarProducto(producto: any) {
     this.productoEditandoId.set(producto._id);
-    this.nombre.set(producto.nombre);
-    this.descripcion.set(producto.descripcion);
-    this.precio.set(String(producto.precio));
-    this.stock.set(String(producto.stock));
-    this.categoria.set(producto.categoria);
+    this.nombre.set(producto.nombre ?? '');
+    this.descripcion.set(producto.descripcion ?? '');
+    this.precio.set(String(producto.precio ?? ''));
+    this.stock.set(String(producto.stock ?? ''));
+    this.categoria.set(producto.categoria ?? '');
+    this.imagen.set(producto.imagen ?? '');
   }
 
-  //Eliminar
   eliminarProducto(id: string) {
     const confirmar = confirm('¿Seguro que deseas eliminar este producto?');
 
@@ -180,5 +188,6 @@ export class ProductoComponent {
     this.precio.set('');
     this.stock.set('');
     this.categoria.set('');
+    this.imagen.set('');
   }
 }
