@@ -1,0 +1,176 @@
+<div class="min-h-screen bg-marca-hielo p-4 lg:p-8 font-sans text-marca-gris">
+  
+  <div class="max-w-7xl mx-auto mb-8 flex flex-col gap-5">
+    
+    <div>
+      <h1 class="text-3xl font-black text-marca-azul">Gestión de Pedidos</h1>
+    </div>
+    
+    <div class="flex">
+      <button type="button" 
+              (click)="togglePedidosPasados()"
+              [ngClass]="{
+                'bg-marca-azul text-white hover:bg-opacity-90': !mostrarPasados,
+                'bg-marca-naranja text-white hover:bg-opacity-90': mostrarPasados
+              }"
+              class="font-bold py-2.5 px-6 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 cursor-pointer text-sm sm:text-base">
+        
+        {{ mostrarPasados ? 'Ocultar Historial Pasado' : 'Ver todos los pedidos pasados' }}
+      </button>
+    </div>
+
+  </div>
+
+  <div *ngIf="listaPedidos.length === 0" class="max-w-7xl mx-auto bg-white p-10 rounded-2xl shadow-sm text-center border border-gray-100">
+    <h3 class="text-xl font-bold text-marca-gris">No hay pedidos activos</h3>
+    <p class="text-gray-500 mt-2">La cola de trabajo está limpia por el momento.</p>
+  </div>
+
+  <div *ngIf="listaPedidos.length > 0" 
+       [ngClass]="mostrarPasados ? 'lg:grid-cols-4 max-w-[95rem]' : 'lg:grid-cols-3 max-w-7xl'"
+       class="mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-start transition-all duration-300">
+
+    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+      <h2 class="text-sm font-bold text-marca-turquesa mb-4 uppercase tracking-wider">Pendientes de confirmar</h2>
+      <div class="space-y-4">
+        <ng-container *ngFor="let pedido of listaPedidos">
+          <div *ngIf="pedido.estado === 'pendiente'" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-marca-naranja"></div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs text-gray-400 font-mono">#{{ (pedido._id ? pedido._id.toString().slice(-5).toUpperCase() : '-----') }}</span>
+              <span class="text-[10px] font-bold text-marca-azul bg-marca-turquesa/10 px-2 py-1 rounded-md">{{ pedido.createdAt | date:'shortTime' }}</span>
+            </div>
+            <h3 class="text-lg font-black text-marca-gris truncate">{{ pedido.clienteId }}</h3>
+            <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
+            <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
+              <p *ngIf="pedido.notas" class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
+              <ul class="space-y-1">
+                <li *ngFor="let art of pedido.articulos" class="text-gray-600 text-xs font-medium">{{ art.cantidad }}x {{ art.nombre }}</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <select [value]="pedido.estado" (change)="onCambiarEstado(pedido, $event)"
+                      class="w-full border border-gray-200 rounded-lg p-2 text-sm font-bold bg-white focus:outline-none focus:border-marca-turquesa">
+                <option value="pendiente">Pendiente</option>
+                <option value="preparando">En Preparación</option>
+                <option value="listo">Listo para Entregar</option>
+                <option value="cancelado">Cancelar Pedido</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+      <h2 class="text-sm font-bold text-marca-turquesa mb-4 uppercase tracking-wider">En Preparación</h2>
+      <div class="space-y-4">
+        <ng-container *ngFor="let pedido of listaPedidos">
+          <div *ngIf="pedido.estado === 'preparando'" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-marca-azul"></div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs text-gray-400 font-mono">#{{ (pedido._id ? pedido._id.toString().slice(-5).toUpperCase() : '-----') }}</span>
+              <span class="text-[10px] font-bold text-marca-azul bg-marca-turquesa/10 px-2 py-1 rounded-md">{{ pedido.createdAt | date:'shortTime' }}</span>
+            </div>
+            <h3 class="text-lg font-black text-marca-gris truncate">{{ pedido.clienteId }}</h3>
+            <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
+            <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
+              <p *ngIf="pedido.notas" class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
+              <ul class="space-y-1">
+                <li *ngFor="let art of pedido.articulos" class="text-gray-600 text-xs font-medium">{{ art.cantidad }}x {{ art.nombre }}</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+              <select [value]="pedido.estado" (change)="onCambiarEstado(pedido, $event)"
+                      class="w-full border border-gray-200 rounded-lg p-2 text-sm font-bold bg-white focus:outline-none focus:border-marca-turquesa">
+                <option value="pendiente">Pendiente</option>
+                <option value="preparando">En Preparación</option>
+                <option value="listo">Listo para Entregar</option>
+                <option value="cancelado">Cancelar Pedido</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200">
+      <h2 class="text-sm font-bold text-marca-turquesa mb-4 uppercase tracking-wider">Listos para Recoger</h2>
+      <div class="space-y-4">
+        <ng-container *ngFor="let pedido of listaPedidos">
+          <div *ngIf="pedido.estado === 'listo'" class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-marca-turquesa"></div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs text-gray-400 font-mono">#{{ (pedido._id ? pedido._id.toString().slice(-5).toUpperCase() : '-----') }}</span>
+              <span class="text-[10px] font-bold text-marca-azul bg-marca-turquesa/10 px-2 py-1 rounded-md">{{ pedido.createdAt | date:'shortTime' }}</span>
+            </div>
+            <h3 class="text-lg font-black text-marca-gris truncate">{{ pedido.clienteId }}</h3>
+            <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
+            <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
+              <p *ngIf="pedido.notas" class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
+              <ul class="space-y-1">
+                <li *ngFor="let art of pedido.articulos" class="text-gray-600 text-xs font-medium">{{ art.cantidad }}x {{ art.nombre }}</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100 space-y-3">
+              <select [value]="pedido.estado" (change)="onCambiarEstado(pedido, $event)"
+                      class="w-full border border-gray-200 rounded-lg p-2 text-sm font-bold bg-white focus:outline-none focus:border-marca-turquesa">
+                <option value="pendiente">Pendiente</option>
+                <option value="preparando">En Preparación</option>
+                <option value="listo">Listo para Entregar</option>
+                <option value="cancelado">Cancelar Pedido</option>
+              </select>
+              <button type="button" (click)="onEntregarPedido(pedido._id)"
+                      class="w-full bg-marca-azul hover:bg-opacity-90 text-white text-sm font-bold py-2.5 px-4 rounded-lg transition shadow-sm flex justify-center items-center gap-2 cursor-pointer">
+                Entregar el Pedido
+              </button>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div *ngIf="mostrarPasados" class="bg-gray-100 rounded-2xl p-4 border border-gray-300 border-dashed animate-fade-in">
+      <h2 class="text-sm font-bold text-gray-500 mb-4 uppercase tracking-wider">Historial Terminado</h2>
+      <div class="space-y-4">
+        <ng-container *ngFor="let pedido of listaPedidos">
+          <div *ngIf="pedido.estado === 'entregado' || pedido.estado === 'cancelado'" 
+               class="bg-white/80 rounded-xl border border-gray-200 p-5 opacity-85 hover:opacity-100 transition relative overflow-hidden shadow-xs">
+            
+            <div class="absolute top-0 left-0 w-full h-1" [ngClass]="pedido.estado === 'entregado' ? 'bg-gray-400' : 'bg-red-400'"></div>
+
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs text-gray-400 font-mono">#{{ (pedido._id ? pedido._id.toString().slice(-5).toUpperCase() : '-----') }}</span>
+              <span [ngClass]="pedido.estado === 'entregado' ? 'text-gray-600 bg-gray-100' : 'text-red-700 bg-red-50'" 
+                    class="text-[9px] font-black uppercase px-2 py-0.5 rounded-sm">
+                {{ pedido.estado }}
+              </span>
+            </div>
+
+            <h3 class="text-base font-bold text-gray-500 truncate">{{ pedido.clienteId }}</h3>
+            <p class="text-lg font-black text-gray-400 mt-0.5">${{ pedido.total }}</p>
+
+            <div class="bg-gray-50 rounded-lg p-2.5 text-xs mt-2 text-gray-400">
+              <ul class="space-y-0.5">
+                <li *ngFor="let art of pedido.articulos">{{ art.cantidad }}x {{ art.nombre }}</li>
+              </ul>
+            </div>
+            
+            <div class="mt-3 pt-3 border-t border-gray-100">
+              <select [value]="pedido.estado" (change)="onCambiarEstado(pedido, $event)"
+                      class="w-full border border-gray-200 rounded-md p-1.5 text-xs bg-white text-gray-500 focus:outline-none">
+                <option value="pendiente">Pendiente</option>
+                <option value="preparando">En Preparación</option>
+                <option value="listo">Listo para Entregar</option>
+                <option value="entregado">Entregado</option>
+                <option value="cancelado">Cancelado</option>
+              </select>
+            </div>
+
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+</div>

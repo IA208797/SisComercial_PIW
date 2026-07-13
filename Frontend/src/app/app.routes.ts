@@ -5,6 +5,9 @@ import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin
 import { CanjeRecompensasComponent } from './pages/perfil-lealtad/canje/canje-recompensas.component';
 import { RegistrarVisitaComponent } from './pages/perfil-lealtad/visita/registrar-visita.component';
 import { DashboardClienteComponent } from './pages/perfil-lealtad/dashboard-cliente/dashboard-cliente.component';
+import { AdminPedidosComponent } from './pages/Pedidos/AdministrarPedidos/administrarPedido.page';
+import { MisPedidosComponent } from './pages/Pedidos/RevisarEstadoPedido/revisarEstadoPedido.page';
+import { ConfirmacionPedidoComponent } from './pages/Pedidos/RealizarPedido/realizarpedido.page';
 
 export const routes: Routes = [
   // Redirección inicial
@@ -31,6 +34,11 @@ export const routes: Routes = [
       {
         path: 'productos',
         component: ProductoComponent, // URL: /admin/productos
+      },
+      {
+        path: 'pedidos',
+        component: AdminPedidosComponent
+
       }
     ]
   },
@@ -47,6 +55,14 @@ export const routes: Routes = [
       {
         path: 'canje',
         component: CanjeRecompensasComponent, // URL: /cliente/canje
+      },
+      {
+        path:'misPedidos',
+        component: MisPedidosComponent,
+      },
+      {
+        path:'pedidos',
+        component: ConfirmacionPedidoComponent
       }
     ]
   },

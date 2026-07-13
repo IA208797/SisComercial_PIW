@@ -11,7 +11,7 @@ import dotenv from 'dotenv'; // Librería para leer las variables de entorno del
 // ==========================================
 import productoRoutes from './routes/producto.routes'; // Rutas encargadas del inventario/productos
 import lealtadRoutes from './routes/lealtad.routes';   // Rutas del sistema de lealtad y puntos
-
+import pedidosRoutes from './routes/pedido.routes';
 // ==========================================
 // 3. CONFIGURACIÓN INICIAL DEL SERVIDOR
 // ==========================================
@@ -63,6 +63,9 @@ app.use('/api/productos', productoRoutes);
 // - GET:  http://localhost:4000/api/lealtad/reporte
 app.use('/api/lealtad', lealtadRoutes);
 
+
+///////////MODULO PEDIDOS
+app.use('/api/pedidos', pedidosRoutes);
 // ==========================================
 // 7. ARRANQUE DEL SERVIDOR
 // ==========================================
