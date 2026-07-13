@@ -4,22 +4,22 @@ import { PedidoModel } from "../models/pedido.model";
 import { Producto } from "../models/producto.model";
 
 ////////////Si el de Kevin funciona no usar este
-// const obtenerProductoenPedido =  async (req: Request, res: Response): Promise<void> => {
-//     try {
-//         const productos = await Producto.find({}, '_id nombre precio');
-//         res.status(200).json({
-//             success: true,
-//             data: productos
-//         });
-//     } catch (error: any) {
-//         console.error('Error al obtener el catálogo:', error);
-//         res.status(500).json({
-//             success: false,
-//             message: 'Error al obtener los productos.',
-//             error: error.message
-//         });
-//     }
-// };
+export const obtenerProductoenPedido =  async (req: Request, res: Response): Promise<void> => {
+    try {
+        const productos = await Producto.find({}, '_id nombre precio');
+        res.status(200).json({
+            success: true,
+            data: productos
+        });
+    } catch (error: any) {
+        console.error('Error al obtener el catálogo:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error al obtener los productos.',
+            error: error.message
+        });
+    }
+};
 
 export const realizarPedido = async (req: Request, res: Response): Promise<void> => {
     try {

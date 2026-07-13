@@ -7,7 +7,7 @@ import { Footer } from '../shared/footer/footer';
 @Component({
   selector: 'app-menu-producto',
   standalone: true,
-  imports: [Header, Footer],
+  // imports: [Header, Footer],
   templateUrl: './menuProducto.component.html',
 }) 
 

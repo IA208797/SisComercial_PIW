@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class PedidoService {
     private http = inject(HttpClient);
-    private apiUrl = `${environment.apiUrl}/lealtad`;
+    private apiUrl = `${environment.apiUrl}/pedidos`;
 
 
     //////////////////

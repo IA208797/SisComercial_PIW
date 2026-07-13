@@ -3,17 +3,19 @@ import {
     realizarPedido, 
     obtenerPedidosCliente, 
     obtenerPedidosAdmin, 
-    cambiarEstadoPedido
+    cambiarEstadoPedido, 
+    obtenerProductoenPedido
 } from "../controllers/pedido.controller"; 
 
 const router = Router(); 
 
-router.post('/api/RealizarPedido', realizarPedido); 
+router.post('/RealizarPedido', realizarPedido); 
 
-router.get('/api/pedidos/cliente/:clienteId', obtenerPedidosCliente);
+router.get('/pedidos/cliente/:clienteId', obtenerPedidosCliente);
 
-router.get ('/api/admin/pedidos',obtenerPedidosAdmin); 
+router.get ('/admin/pedidos',obtenerPedidosAdmin); 
 
-router.patch('/api/admin/pedidos/:id/estado', cambiarEstadoPedido); 
+router.patch('/admin/pedidos/:id/estado', cambiarEstadoPedido); 
 
+router.get('/ObtenerProductos', obtenerProductoenPedido);
 export default router;
