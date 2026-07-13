@@ -45,3 +45,9 @@ Thumbs.db
 
 # Archivos de entorno
 .env
+
+
+
+Backend/node_modules/
+Frontend/node_modules/
+Frontend/.angular/
