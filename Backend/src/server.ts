@@ -12,6 +12,7 @@ import dotenv from 'dotenv'; // Librería para leer las variables de entorno del
 import productoRoutes from './routes/producto.routes'; // Rutas encargadas del inventario/productos
 import lealtadRoutes from './routes/lealtad.routes';   // Rutas del sistema de lealtad y puntos
 import pedidosRoutes from './routes/pedido.routes';
+import usuarioRoutes from './routes/usuario.routes';
 // ==========================================
 // 3. CONFIGURACIÓN INICIAL DEL SERVIDOR
 // ==========================================
@@ -33,7 +34,7 @@ if (!MONGO_URL) {
 // Los middlewares procesan las peticiones ANTES de que lleguen a tus rutas
 app.use(cors()); // Permite el intercambio de recursos entre distintos orígenes (Evita el bloqueo de CORS en Angular)
 app.use(express.json()); // Permite que el servidor entienda y procese datos que vengan en formato JSON (en el body de los POST)
-
+app.use('/api/usuarios', usuarioRoutes);
 // ==========================================
 // 5. CONEXIÓN A LA BASE DE DATOS
 // ==========================================

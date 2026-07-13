@@ -1,17 +1,36 @@
-import { Schema, model } from "mongoose";
+import mongoose from 'mongoose';
 
-const usuarioSchema = new Schema({
-  nombre: { type: String, required: true },
-  telefono: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
-    match: [/^\d{10}$/, "El número de teléfono debe tener 10 dígitos"],
+const usuarioSchema = new mongoose.Schema(
+  {
+    nombre: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    correo: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+
+    telefono: {
+      type: String,
+      required: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  email: { type: String, required: true, unique: true },
-  rol: { type: String, enum: ["cliente", "admin"], default: "cliente" },
-  fecha_registro: { type: Date, default: Date.now },
-});
+  {
+    timestamps: true,
+  }
+);
 
-export const Usuario = model("Usuario", usuarioSchema);
+const Usuario = mongoose.model('Usuario', usuarioSchema);
+
+export default Usuario;
