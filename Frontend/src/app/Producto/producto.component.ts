@@ -1,12 +1,12 @@
 import { Component, computed, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Header } from '../shared/header/header';
-import { Footer } from '../shared/footer/footer';
+// import { Header } from '../shared/header/header';
+// import { Footer } from '../shared/footer/footer';
 
 @Component({
   selector: 'app-producto',
   standalone: true,
-  imports: [Header, Footer],
+  //imports: [Header, Footer],
   templateUrl: './producto.component.html',
 })
 export class ProductoComponent {

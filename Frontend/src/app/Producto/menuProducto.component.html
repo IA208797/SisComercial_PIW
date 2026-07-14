@@ -26,7 +26,7 @@
       @for(producto of productos(); track producto._id){
       <article
         class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
-        
+
         <!-- pinche foto -->
         <div class="h-44 w-full bg-[#F8FAFC]">
           @if(producto.imagen){
@@ -69,10 +69,24 @@
             <p class="text-sm text-slate-500">
               Stock: {{ producto.stock }}
             </p>
-            <button
+            @if (obtenerCantidad(producto._id) === 0) {
+            <button (click)="agregarAlCarrito(producto)"
               class="rounded-lg bg-[#F97316] px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600">
               Agregar
             </button>
+            }
+            <!-- Esto es del carrito -->
+            @else {
+            <div class="flex items-center gap-4 mt-2">
+              <button (click)="modificarCantidad(producto._id, -1)"
+                class="bg-marca-naranja px-3 py-1 rounded font-bold hover:bg-orange-600">-</button>
+              <span class="font-bold text-lg">{{ obtenerCantidad(producto._id) }}</span>
+              <button (click)="modificarCantidad(producto._id, 1)"
+                class="bg-marca-naranja px-3 py-1 rounded font-bold hover:bg-orange-600">+</button>
+            </div>
+            }
+            <!-- Esto es del carrito -->
+
           </div>
         </div>
       </article>

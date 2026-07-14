@@ -8,3 +8,10 @@ export interface Pedido {
   articulos: ArticuloPedido[];
   notas?: string;
 }
+
+export interface ProductoCatalogo {
+  _id: string;
+  nombre: string;
+  precio: number;
+  imagen: string;
+}

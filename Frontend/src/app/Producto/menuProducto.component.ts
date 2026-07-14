@@ -1,7 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Header } from '../shared/header/header';
-import { Footer } from '../shared/footer/footer';
+// import { Header } from '../shared/header/header';
+// import { Footer } from '../shared/footer/footer';
+
+/////////Para el carrito de compras BORRAR SI NO FUNCIONA
+import { CarritoService } from '../services/carrito.service';
 
 //Otro componente ahueso
 @Component({
@@ -12,7 +15,7 @@ import { Footer } from '../shared/footer/footer';
 }) 
 
 export class MenuProductoComponent {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private carritoService: CarritoService) {
     //cargar todo en cuanto suceda el click
     this.obtenerProductos();
   }
@@ -35,4 +38,27 @@ export class MenuProductoComponent {
       },
     });
   }
+
+  /////////Este bloque es para el carrito de compras BORRAR SI NO FUNCIONA
+  
+
+  public obtenerCantidad(productoId: string): number{
+    return this.carritoService.obtenerCantidadDeProducto(productoId);
+  }
+
+  public agregarAlCarrito(producto: any): void {
+    this.carritoService.agregarArticulo({
+      productoId: producto._id,
+      nombre: producto.nombre,
+      precio: producto.precio,
+      cantidad: 1
+    });
+  }
+
+  public modificarCantidad(productoId: string, cambio: number): void {
+    const cantidadActual = this.obtenerCantidad(productoId);
+    this.carritoService.actualizarCantidad(productoId, cantidadActual + cambio);
+  }
+
+  /////////Este bloque es para el carrito de compras BORRAR SI NO FUNCIONA
 }
