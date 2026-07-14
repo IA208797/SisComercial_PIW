@@ -8,6 +8,10 @@ import { DashboardClienteComponent } from './pages/perfil-lealtad/dashboard-clie
 import { AdminPedidosComponent } from './pages/Pedidos/AdministrarPedidos/administrarPedido.page';
 import { MisPedidosComponent } from './pages/Pedidos/RevisarEstadoPedido/revisarEstadoPedido.page';
 import { ConfirmacionPedidoComponent } from './pages/Pedidos/RealizarPedido/realizarpedido.page';
+import { Login } from './usuario/login/login';
+import { Registro } from './usuario/registro/registro';
+import { Perfil } from './usuario/perfil/perfil';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   // Redirección inicial
@@ -57,11 +61,11 @@ export const routes: Routes = [
         component: CanjeRecompensasComponent, // URL: /cliente/canje
       },
       {
-        path:'misPedidos',
+        path: 'misPedidos',
         component: MisPedidosComponent,
       },
       {
-        path:'pedidos',
+        path: 'pedidos',
         component: ConfirmacionPedidoComponent
       }
     ]
@@ -72,7 +76,22 @@ export const routes: Routes = [
     path: 'registrar',
     component: RegistrarVisitaComponent, // URL: /registrar
   },
-
+  // ==============================
+  // MÓDULO USUARIOS
+  // ==============================
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'registro',
+    component: Registro,
+  },
+  {
+    path: 'perfil',
+    component: Perfil,
+    canActivate: [authGuard],
+  },
   // RUTA COMODÍN (Protección 404)
   // Si la ruta no existe, redirige al menú de forma segura
   {

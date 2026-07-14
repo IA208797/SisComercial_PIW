@@ -1,0 +1,18 @@
+<div class="perfil-container">
+    <h1>
+        Bienvenido, {{usuario?.nombre}} 👋
+    </h1>
+    <div class="datos">
+        <p>
+            <strong>Nombre:</strong>
+            {{usuario?.nombre}}
+        </p>
+        <p>
+            <strong>Correo:</strong>
+            {{usuario?.correo}}
+        </p>
+    </div>
+    <button (click)="cerrarSesion()">
+        Cerrar sesión
+    </button>
+</div>

@@ -1,0 +1,132 @@
+/* Fondo */
+
+.login-container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#F8FAFC;
+    padding:40px;
+}
+
+/* Tarjeta */
+
+.login-container form{
+    width:420px;
+    background:#FFFFFF;
+    border-radius:20px;
+    padding:35px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+/* Logo */
+
+.logo{
+    width:90px;
+    height:90px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:#0F766E;
+    color:#FFFFFF;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+    box-shadow:0 8px 20px rgba(15,118,110,.25);
+}
+
+/* Título */
+
+h2{
+    text-align:center;
+    color:#1E293B;
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+/* Subtítulo */
+
+.subtitulo{
+    text-align:center;
+    color:#64748B;
+    margin-bottom:18px;
+    font-size:15px;
+}
+
+/* Empresa */
+
+.empresa{
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    color:#0F766E;
+    margin-bottom:25px;
+}
+
+/* Labels */
+
+label{
+    display:block;
+    margin-top:15px;
+    margin-bottom:6px;
+    font-size:14px;
+    font-weight:600;
+    color:#1E293B;
+}
+
+/* Inputs */
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #D1D5DB;
+    border-radius:10px;
+    font-size:15px;
+    box-sizing:border-box;
+    transition:.3s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#2DD4BF;
+    box-shadow:0 0 0 3px rgba(45,212,191,.20);
+}
+
+/* Botón */
+
+button[type="submit"]{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    background:#F97316;
+    color:white;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button[type="submit"]:hover{
+    background:#EA6509;
+}
+
+/* Registro */
+
+.registro-link{
+    margin-top:25px;
+    text-align:center;
+    color:#475569;
+    font-size:15px;
+}
+
+.registro-link a{
+    color:#0F766E;
+    font-weight:600;
+    text-decoration:none;
+}
+
+.registro-link a:hover{
+    color:#2DD4BF;
+}

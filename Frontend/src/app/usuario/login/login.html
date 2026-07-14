@@ -1,0 +1,42 @@
+<div class="login-container">
+
+    <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+
+        <div class="logo">
+            👤
+        </div>
+
+        <h2>Iniciar sesión</h2>
+
+        <p class="empresa">
+            Nombre de la empresa
+        </p>
+
+        <label>Correo electrónico</label>
+
+        <input
+            type="email"
+            formControlName="correo"
+            placeholder="correo@ejemplo.com">
+
+        <label>Contraseña</label>
+
+        <input
+            type="password"
+            formControlName="password"
+            placeholder="********">
+
+        <button type="submit">
+            Iniciar sesión
+        </button>
+
+        <p class="registro-link">
+            ¿No tienes una cuenta?
+            <a routerLink="/registro">
+                Regístrate
+            </a>
+        </p>
+
+    </form>
+
+</div>

@@ -1,0 +1,204 @@
+<div class="registro-container">
+
+  <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+    <div class="icono-registro">👤</div>
+    <h2>Crear cuenta</h2>
+
+    <!-- ========================= -->
+    <!-- NOMBRE -->
+    <!-- ========================= -->
+    <label>Nombre completo</label>
+
+    <div class="input-group">
+      <span>👤</span>
+      <input type="text" placeholder="Ingresa tu nombre completo" formControlName="nombre">
+    </div>
+
+    @if (
+    registroForm.get('nombre')?.touched &&
+    registroForm.get('nombre')?.invalid
+    ) {
+
+    <small class="error">
+
+      @if (registroForm.get('nombre')?.errors?.['required']) {
+      El nombre es obligatorio.
+      }
+
+      @if (registroForm.get('nombre')?.errors?.['minlength']) {
+      El nombre debe tener al menos 3 caracteres.
+      }
+
+    </small>
+
+    }
+
+    <!-- ========================= -->
+    <!-- CORREO -->
+    <!-- ========================= -->
+
+    <label>Correo</label>
+
+    <div class="input-group">
+      <span>✉️</span>
+
+      <input type="email" placeholder="Ingresa tu correo" formControlName="correo">
+    </div>
+
+    @if (
+    registroForm.get('correo')?.touched &&
+    registroForm.get('correo')?.invalid
+    ) {
+
+    <small class="error">
+
+      @if (registroForm.get('correo')?.errors?.['required']) {
+      El correo es obligatorio.
+      }
+
+      @if (registroForm.get('correo')?.errors?.['email']) {
+      Ingresa un correo electrónico válido.
+      }
+
+    </small>
+
+    }
+
+    <!-- ========================= -->
+    <!-- TELÉFONO -->
+    <!-- ========================= -->
+
+    <label>Teléfono</label>
+
+    <div class="input-group">
+      <span>📱</span>
+
+      <input type="tel" maxlength="10" placeholder="Ingresa tu teléfono" formControlName="telefono">
+    </div>
+
+    @if (
+    registroForm.get('telefono')?.touched &&
+    registroForm.get('telefono')?.invalid
+    ) {
+
+    <small class="error">
+
+      @if (registroForm.get('telefono')?.errors?.['required']) {
+      El teléfono es obligatorio.
+      }
+
+      @if (registroForm.get('telefono')?.errors?.['pattern']) {
+      El teléfono debe contener exactamente 10 dígitos.
+      }
+
+    </small>
+
+    }
+
+    <!-- ========================= -->
+    <!-- CONTRASEÑA -->
+    <!-- ========================= -->
+
+    <label>Contraseña</label>
+
+    <div class="input-group">
+      <span>🔒</span>
+
+      <input type="password" placeholder="Crea una contraseña" formControlName="password">
+    </div>
+
+    <small class="password-info">
+
+      La contraseña debe contener:
+
+      <ul>
+        <li>Mínimo 8 caracteres.</li>
+        <li>Al menos una letra mayúscula.</li>
+        <li>Al menos una letra minúscula.</li>
+        <li>Al menos un número.</li>
+        <li>Al menos un carácter especial (@, #, $, %, &, etc.).</li>
+      </ul>
+
+    </small>
+
+    @if (
+    registroForm.get('password')?.touched &&
+    registroForm.get('password')?.invalid
+    ) {
+
+    <small class="error">
+
+      @if (registroForm.get('password')?.errors?.['required']) {
+      La contraseña es obligatoria.
+      }
+
+      @if (registroForm.get('password')?.errors?.['minlength']) {
+      Debe tener al menos 8 caracteres.
+      }
+
+      @if (registroForm.get('password')?.errors?.['pattern']) {
+      Debe contener una mayúscula, una minúscula, un número y un carácter especial.
+      }
+
+    </small>
+
+    }
+
+    <!-- ========================= -->
+    <!-- CONFIRMAR CONTRASEÑA -->
+    <!-- ========================= -->
+
+    <label>Confirmar contraseña</label>
+
+    <div class="input-group">
+      <span>🔒</span>
+
+      <input type="password" placeholder="Confirma tu contraseña" formControlName="confirmarPassword">
+    </div>
+
+    @if (
+    registroForm.hasError('passwordsMismatch') &&
+    registroForm.get('confirmarPassword')?.touched
+    ) {
+
+    <small class="error">
+      Las contraseñas no coinciden.
+    </small>
+
+    }
+
+    <!-- ========================= -->
+    <!-- TÉRMINOS -->
+    <!-- ========================= -->
+
+    <div class="terminos">
+
+      <input type="checkbox" formControlName="terminos">
+
+      <span>Acepto los términos y condiciones</span>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- BOTÓN -->
+    <!-- ========================= -->
+
+    <button type="submit" [disabled]="registroForm.invalid">
+
+      Inscribirse
+
+    </button>
+
+    <p class="login-link">
+
+      ¿Ya tienes una cuenta?
+
+      <a routerLink="/login">
+        Inicia sesión
+      </a>
+
+    </p>
+
+  </form>
+
+</div>

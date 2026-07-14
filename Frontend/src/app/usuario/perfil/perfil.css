@@ -1,0 +1,20 @@
+.perfil-container{
+    max-width:500px;
+    margin:50px auto;
+    padding:30px;
+    text-align:center;
+    border-radius:15px;
+    box-shadow:0 0 10px #ccc;
+}
+
+.datos{
+    text-align:left;
+    margin:20px;
+}
+
+button{
+    padding:10px 25px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
