@@ -2,14 +2,12 @@ import { Component, signal, inject } from '@angular/core';
 import { LealtadService } from '../../../services/lealtad.service'; // Ajusta la ruta
 import { ILealtadFrontend } from '../../../core/models/lealtad.interface';
 import { DatePipe } from '@angular/common';
-import { Header } from "../../../shared/header/header";
-import { Footer } from "../../../shared/footer/footer";
 import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard-cliente',
   standalone: true,
-  imports: [DatePipe, LowerCasePipe, Header, Footer],
+  imports: [DatePipe, LowerCasePipe],
   templateUrl: './dashboard-cliente.component.html'
 })
 export class DashboardClienteComponent {

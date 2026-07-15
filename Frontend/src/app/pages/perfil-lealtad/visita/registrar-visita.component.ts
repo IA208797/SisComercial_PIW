@@ -1,14 +1,12 @@
 import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LealtadService, RespuestaVisita } from '../../../services/lealtad.service';
-import { Header } from "../../../shared/header/header";
-import { Footer } from "../../../shared/footer/footer";
 import { NgClass } from "../../../../../node_modules/@angular/common/types/_common_module-chunk";
 
 @Component({
   selector: 'app-registrar-visita',
   standalone: true,
-  imports: [FormsModule, Header, Footer], 
+  imports: [FormsModule], 
   templateUrl: './registrar-visita.component.html'
 })
 export class RegistrarVisitaComponent {

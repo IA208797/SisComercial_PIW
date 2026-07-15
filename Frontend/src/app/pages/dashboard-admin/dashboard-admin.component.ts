@@ -2,13 +2,11 @@ import { Component, OnInit, signal, inject } from '@angular/core';
 import { LealtadService } from '../../services/lealtad.service';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Header } from "../../shared/header/header";
-import { Footer } from "../../shared/footer/footer";
 
 @Component({
   selector: 'app-dashboard-admin',
   standalone: true,
-  imports: [RouterLink, CommonModule, Header, Footer], 
+  imports: [RouterLink, CommonModule], 
   templateUrl: './dashboard-admin.component.html'
 })
 export class DashboardAdminComponent implements OnInit {

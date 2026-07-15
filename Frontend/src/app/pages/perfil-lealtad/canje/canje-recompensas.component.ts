@@ -1,8 +1,6 @@
 import { Component, signal, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Necesario para usar ngModel
 import { LealtadService } from '../../../services/lealtad.service';
-import { Header } from "../../../shared/header/header";
-import { Footer } from "../../../shared/footer/footer";
 
 interface IRecompensaCatalogo {
   descripcion: string;
@@ -12,7 +10,7 @@ interface IRecompensaCatalogo {
 @Component({
   selector: 'app-canje-recompensas',
   standalone: true,
-  imports: [FormsModule, Header, Footer], 
+  imports: [FormsModule], 
   templateUrl: './canje-recompensas.component.html'
 })
 export class CanjeRecompensasComponent {
