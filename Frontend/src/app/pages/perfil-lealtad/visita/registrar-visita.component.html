@@ -4,14 +4,18 @@
   Esto no va aqui -->
 
   <main class="grow max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
-
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
-      <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-gray-100 transition-all">
+      <div class="bg-white p-8 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all">
         
         <div class="mb-8">
-          <h2 class="text-3xl font-bold text-marca-azul font-merriweather tracking-tight">Registrar Visita</h2>
-          <p class="text-marca-gris/70 text-sm mt-2 font-medium">Registra una compra para que el cliente acumule visitas y puntos.</p>
+          <h2 class="text-3xl font-bold text-marca-azul font-merriweather tracking-tight m-0">
+            Registrar Visita
+          </h2>
+          <p class="text-marca-gris/70 text-sm mt-2 font-medium">
+            Registra una compra para que el cliente acumule visitas y puntos.
+          </p>
         </div>
 
         @if (mensajeError()) {
@@ -20,114 +24,128 @@
           </div>
         }
 
-        <form (ngSubmit)="procesarVisita()" class="space-y-6">
-          
-          <div>
-            <label for="cliente_id" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
+        <form (ngSubmit)="procesarVisita()" class="flex flex-col gap-5">
+          <div class="flex flex-col gap-1.5">
+            <label for="cliente_id" class="font-bold text-[#444] text-[0.95rem]">
               Teléfono o ID del Cliente
             </label>
-            <input 
-              type="text" 
-              id="cliente_id" 
-              name="cliente_id" 
-              [(ngModel)]="datosVisita.cliente_id" 
-              class="w-full px-5 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa transition-all text-marca-gris text-sm font-medium placeholder:text-gray-400"
-              placeholder="Ej: 6561234567 o 6a474b11..." 
-              required>
+            <input
+              type="text"
+              id="cliente_id"
+              name="cliente_id"
+              [(ngModel)]="datosVisita.cliente_id"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa text-[1rem]"
+              placeholder="Ej: 6561234567 o 6a474b11..."
+              required
+            />
           </div>
 
-          <div>
-            <label for="pedido_id" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
+          <div class="flex flex-col gap-1.5">
+            <label for="pedido_id" class="font-bold text-[#444] text-[0.95rem]">
               ID del Pedido
             </label>
-            <div class="flex gap-3">
-              <input 
-                type="text" 
-                id="pedido_id" 
-                name="pedido_id" 
-                [(ngModel)]="datosVisita.pedido_id" 
-                class="grow px-5 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa transition-all text-marca-gris text-sm font-medium placeholder:text-gray-400"
-                placeholder="Código de 24 caracteres" 
-                required>
-              <button 
-                type="button" 
-                class="bg-marca-turquesa/10 text-marca-azul border border-marca-turquesa/20 font-bold px-5 rounded-xl hover:bg-marca-turquesa/20 transition-colors shrink-0 text-sm" 
-                (click)="generarPedidoIdMock()">
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="pedido_id"
+                name="pedido_id"
+                [(ngModel)]="datosVisita.pedido_id"
+                class="grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa text-[1rem]"
+                placeholder="Código de 24 caracteres"
+                required
+              />
+              <button
+                type="button"
+                class="bg-gray-200 hover:bg-gray-300 text-marca-gris font-bold px-4 rounded-lg transition-colors shrink-0"
+                (click)="generarPedidoIdMock()"
+              >
                 Auto
               </button>
             </div>
           </div>
 
-          <div>
-            <label for="total" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
+          <div class="flex flex-col gap-1.5">
+            <label for="total" class="font-bold text-[#444] text-[0.95rem]">
               Total de la Compra ($ MXN)
             </label>
-            <div class="relative mb-2">
-              <span class="absolute left-5 top-3.5 text-gray-400 font-bold">$</span>
-              <input 
-                type="number" 
-                id="total" 
-                name="total" 
-                [(ngModel)]="datosVisita.total_compra" 
-                class="w-full pl-9 pr-5 py-3.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa transition-all text-marca-gris text-lg font-bold placeholder:text-gray-400"
-                placeholder="0.00" 
-                min="1" 
-                required>
+            <div class="relative">
+              <span class="absolute left-4 top-3 text-gray-500 font-bold">$</span>
+              <input
+                type="number"
+                id="total"
+                name="total"
+                [(ngModel)]="datosVisita.total_compra"
+                class="w-full pl-8 pr-4 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa text-[1rem]"
+                placeholder="0.00"
+                min="1"
+                required
+              />
             </div>
-            <p class="text-xs text-marca-gris/50 font-medium flex items-center gap-1.5">
+            <p class="text-xs text-marca-gris/60 mt-1">
               Regla: Recibe 1 punto por cada $10 pesos de consumo.
             </p>
           </div>
 
-          <div class="pt-4">
-            <button 
-              type="submit" 
-              class="w-full bg-marca-naranja hover:opacity-90 text-white font-bold py-4 px-8 rounded-xl shadow-sm transition-all duration-200 focus:ring-2 focus:ring-marca-naranja/30 outline-none disabled:opacity-50 disabled:cursor-not-allowed text-sm active:scale-[0.98]" 
-              [disabled]="procesando()">
-              {{ procesando() ? 'Registrando Visita...' : 'Completar Venta y Sumar Puntos' }}
-            </button>
-          </div>
+          <button
+            type="submit"
+            class="rounded-lg cursor-pointer bg-marca-naranja px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-orange-600 focus:ring-2 focus:ring-orange-300 outline-none shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="procesando()"
+          >
+            {{ procesando() ? 'Registrando...' : 'Completar Venta y Sumar Puntos' }}
+          </button>
         </form>
       </div>
 
       @if (resultado()) {
-        <div class="lg:col-span-5 bg-marca-azul text-white rounded-3xl p-8 shadow-lg relative overflow-hidden animate-fade-in border border-marca-azul/80">
+        <div class="bg-[#fafafa] p-8 rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.08)] border-t-4 border-t-marca-turquesa animar-entrada">
           
-          <div class="absolute top-0 left-0 w-full h-3 bg-marca-turquesa opacity-80"></div>
-
-          <div class="text-center mb-8 pt-4">
-            <div class="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center text-3xl mb-4 border border-white/20 shadow-inner">
-              ✅
+          <div class="text-center mb-6">
+            <div class="w-10 h-10 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
             </div>
-            <h3 class="text-xl font-bold font-merriweather tracking-tight text-white">{{ resultado()?.mensaje }}</h3>
-          </div>
-          
-          <div class="bg-white/5 rounded-2xl p-5 mb-6 border border-white/10 backdrop-blur-sm text-center">
-            <p class="text-white/50 text-xs font-bold uppercase tracking-wider mb-1">Cliente</p>
-            <p class="font-bold text-lg text-marca-turquesa">{{ resultado()?.cliente }}</p>
-          </div>
-
-          <div class="grid grid-cols-2 gap-4 mb-8">
-            <div class="bg-white/5 rounded-2xl p-4 text-center border border-white/10 backdrop-blur-sm">
-              <span class="block text-3xl font-merriweather font-bold text-white mb-1">+{{ resultado()?.saldo_puntos }}</span>
-              <span class="block text-[10px] text-white/60 font-bold uppercase tracking-widest">Puntos Ganados</span>
-            </div>
-            <div class="bg-white/5 rounded-2xl p-4 text-center border border-white/10 backdrop-blur-sm">
-              <span class="block text-3xl font-merriweather font-bold text-white mb-1">{{ resultado()?.total_visitas }}</span>
-              <span class="block text-[10px] text-white/60 font-bold uppercase tracking-widest">Visitas Totales</span>
-            </div>
+            <p class="text-[0.85rem] text-[#777] uppercase tracking-[0.5px] m-0 mb-1">
+              Cliente
+            </p>
+            <h3 class="text-xl font-bold text-marca-azul m-0">
+              {{ resultado()?.cliente }}
+            </h3>
           </div>
 
-          <div class="text-center pt-6 border-t border-white/10">
-            <p class="text-white/50 text-xs font-bold uppercase tracking-wider mb-3">Nivel Actual del Cliente</p>
-            <span class="inline-block bg-white text-marca-azul px-6 py-2 rounded-full text-sm font-bold uppercase tracking-widest shadow-sm" [class]="resultado()?.nivel_actual?.toLowerCase()">
+          <div class="flex gap-4 my-6">
+            <div class="flex-1 bg-white p-4 rounded-lg text-center border border-gray-200">
+              <span class="block text-[1.8rem] font-bold text-emerald-700">
+                +{{ resultado()?.saldo_puntos }}
+              </span>
+              <span class="text-[0.8rem] text-[#666]">Puntos Ganados</span>
+            </div>
+            <div class="flex-1 bg-white p-4 rounded-lg text-center border border-gray-200">
+              <span class="block text-[1.8rem] font-bold text-[#333]">
+                {{ resultado()?.total_visitas }}
+              </span>
+              <span class="text-[0.8rem] text-[#666]">Visitas Totales</span>
+            </div>
+          </div>
+
+          <div class="text-center bg-white p-4 rounded-lg border border-gray-200">
+            <p class="text-[0.8rem] text-[#666] uppercase tracking-[0.5px] m-0">
+              Nivel Actual
+            </p>
+            <span 
+              class="inline-block mt-2 px-6 py-1.5 rounded-full font-bold uppercase text-[0.9rem]"
+              [class]="{
+                'bg-gray-200 text-gray-700': resultado()?.nivel_actual?.toLowerCase() === 'regular',
+                'bg-marca-azul/20 text-marca-azul': resultado()?.nivel_actual?.toLowerCase() === 'frecuente',
+                'bg-marca-naranja/20 text-marca-naranja shadow-sm': resultado()?.nivel_actual?.toLowerCase() === 'vip'
+              }"
+            >
               {{ resultado()?.nivel_actual }}
             </span>
           </div>
 
         </div>
       }
-
     </div>
   </main>
   <!-- Esto tampoco va aqui
