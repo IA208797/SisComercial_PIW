@@ -2,7 +2,7 @@
 body{
     margin:0;
     background:#F8FAFC;
-    font-family:'Inter',sans-serif;
+    font-family:'Roboto',sans-serif;
 }
 
 /* Contenedor principal */
@@ -29,7 +29,7 @@ body{
     text-align:center;
     color:#0F766E;
     font-size:32px;
-    font-family:'Montserrat',sans-serif;
+    font-family:'Poppins',sans-serif;
     margin-bottom:30px;
 }
 
