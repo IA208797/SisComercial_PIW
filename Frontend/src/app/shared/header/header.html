@@ -44,10 +44,7 @@
 
       <nav class="flex items-center gap-2 text-sm font-semibold">
 
-        <a routerLink="/menu" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"
-          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
-          Menú
-        </a>
+
         <!-- ADMIN -->
         <!-- <div class="relative group py-2">
         <button type="button"
@@ -96,6 +93,31 @@
         <!-- USUARIO -->
 
         @if(UsuarioLogeado){
+
+        @if(rolUsuario=='admin'){
+        <a routerLink="/admin/dashboard" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
+          Dashboard
+        </a>
+        <a routerLink="/admin/productos" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
+          Productos
+        </a>
+        <a routerLink="/admin/pedidos" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
+          Pedidos
+        </a>
+        <a routerLink="/menu" (click)="cerrarSesion()" routerLinkActive="" [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
+          Cerrar sesión
+        </a>
+
+
+        }@else{
+        <a routerLink="/menu" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"
+          class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
+          Menú
+        </a>
         <div class="relative group py-2">
           <button type="button"
             class="flex items-center gap-1 rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa cursor-pointer outline-none">
@@ -118,7 +140,8 @@
             </a>
             <a routerLink="/cliente/misPedidos" routerLinkActive="text-marca-azul bg-teal-50"
               class="flex items-center gap-2 px-4 py-2.5 text-sm text-marca-gris hover:text-marca-azul hover:bg-teal-50/60 rounded-lg transition-colors">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="size-6" stroke-width="2">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                class="size-6" stroke-width="2">
                 <path fill-rule="evenodd"
                   d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z"
                   clip-rule="evenodd" />
@@ -154,6 +177,9 @@
           class="rounded-xl px-4 py-2 transition hover:bg-marca-turquesa/20 hover:text-marca-turquesa">
           <app-Carrito></app-Carrito>
         </a>
+
+        }
+
 
         }@else{
         <a routerLink="/login" routerLinkActive="bg-[#F97316]" [routerLinkActiveOptions]="{ exact: true }"

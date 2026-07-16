@@ -286,6 +286,8 @@ export const cambiarEstadoPedido = async (req: Request, res: Response): Promise<
         );
       }
     }
+    
+    
     pedido.estado = nuevoEstado;
     const pedidoActualizado = await pedido.save();
 

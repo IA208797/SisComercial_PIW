@@ -115,7 +115,8 @@ export const loginUsuario = async (req: Request, res: Response) => {
             usuario: {
                 id: usuario._id,
                 nombre: usuario.nombre,
-                correo: usuario.correo
+                correo: usuario.correo, 
+                rol: usuario.rol
             }
         });
 

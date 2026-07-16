@@ -12,7 +12,9 @@ import { Subscription } from 'rxjs';
 })
 export class Header implements OnInit {
   public UsuarioLogeado: boolean = false;
+  public rolUsuario: string = 'cliente';
   private authSubscription!: Subscription;
+  private authRolSubscription!: Subscription;
 
   constructor(private authService: AuthService) { }
 
@@ -20,17 +22,35 @@ export class Header implements OnInit {
 
     this.authSubscription = this.authService.estaLogueado$.subscribe(estado => {
       this.UsuarioLogeado = estado;
+      this.verificarUsuario();
     });
+    // this.authRolSubscription = this.authService.rolUsuario.subscribe(Rol => {
+    //   this.rolUsuario = Rol
+    // })
 
-    this.verificarUsuario();
-
+    
   }
   public verificarUsuario(): void {
+    this.verificarRol()
     this.UsuarioLogeado=this.authService.estaLogueado()
   }
 
   public cerrarSesion(): void {
     this.authService.cerrarSesion();
     this.verificarUsuario();
+  }
+
+  public verificarRol(): void{
+    const datosLocalStorage = this.authService.obtenerUsuario()
+    if(datosLocalStorage){
+      try{
+        console.log(datosLocalStorage.rol)
+        this.rolUsuario = datosLocalStorage.rol
+
+      } catch(error){
+         console.error('Error al transformar los datos del localStorage', error);
+      }
+    }
+    
   }
 }

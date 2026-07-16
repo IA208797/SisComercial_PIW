@@ -260,7 +260,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
           clienteId: objetoJson.id,
           clienteNombre: NombreUsuario
         });
-        console.log(this.pedidoForm)
+        //console.log(this.pedidoForm)
         return NombreUsuario;
 
       } catch (error) {

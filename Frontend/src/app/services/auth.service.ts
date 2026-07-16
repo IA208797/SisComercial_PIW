@@ -13,6 +13,8 @@ export class AuthService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}/usuarios`;
   private logueadoSubject = new BehaviorSubject<boolean>(!!this.obtenerToken());
+  // private rolSubject =  new BehaviorSubject<string>(this.obtenerUsuario().rol);
+  // public rolUsuario = this.rolSubject.asObservable();
   public estaLogueado$ = this.logueadoSubject.asObservable();
 
   constructor(

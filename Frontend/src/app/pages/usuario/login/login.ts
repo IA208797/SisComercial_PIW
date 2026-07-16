@@ -70,8 +70,15 @@ export class Login {
             "usuario",
             JSON.stringify(respuesta.usuario)
           );
-
-          this.router.navigate(['/perfil']);
+          /////////////////////////////////
+          if(this.authService.obtenerUsuario().rol == 'admin'){
+            this.router.navigate(['/admin/dashboard']);
+          }
+          else{
+            this.router.navigate(['/menu']);
+          }
+          ////////////////////////////////
+          //this.router.navigate(['/perfil']);
 
         },
 
