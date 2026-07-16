@@ -6,6 +6,7 @@ interface IArticuloPedido {
   nombre: string;
   cantidad: number;
   precioUnitario: number;
+  stock: number;
 }
 
 

@@ -63,9 +63,9 @@ export class ConfirmacionPedidoComponent implements OnInit {
     this.pedidoService.obtenerProductos().subscribe({
       next: (response) => {
         if (response.success) {
-          this.catalogoProductos = response.data;
-
-
+          
+          this.catalogoProductos = response.data.filter((p: ProductoCatalogo) => p.stock > 0);
+          
           this.articulos.clear();
 
           if (this.articulosPrecargados.length > 0) {
@@ -77,7 +77,6 @@ export class ConfirmacionPedidoComponent implements OnInit {
           }
 
           this.calcularTotal();
-
           this.cdr.detectChanges();
         }
       },
@@ -147,11 +146,19 @@ export class ConfirmacionPedidoComponent implements OnInit {
 
     this.articulos.controls.forEach((control) => {
       const prodId = control.get('productoId')?.value;
-      const cantidad = control.get('cantidad')?.value || 0;
+      // Usamos 'let' en lugar de 'const' para poder modificar la cantidad si se pasa del stock
+      let cantidad = control.get('cantidad')?.value || 0; 
 
       const productoEncontrado = this.catalogoProductos.find(p => p._id === prodId);
 
       if (productoEncontrado) {
+        if (cantidad > productoEncontrado.stock) {
+          alert(` Solo hay ${productoEncontrado.stock} unidades de ${productoEncontrado.nombre} disponibles.`);
+          cantidad = productoEncontrado.stock;
+          
+          control.get('cantidad')?.setValue(cantidad, { emitEvent: false });
+        }
+
         acumulado += productoEncontrado.precio * cantidad;
 
         if (cantidad > 0) {
@@ -167,8 +174,6 @@ export class ConfirmacionPedidoComponent implements OnInit {
     });
 
     this.totalVisual = acumulado;
-
-    // Enviamos el estado actualizado del formulario al servicio global de forma síncrona
     this.carritoService.sincronizarCarrito(nuevosArticulosCarrito);
   }
 

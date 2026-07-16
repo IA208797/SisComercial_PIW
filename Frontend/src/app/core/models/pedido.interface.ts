@@ -15,4 +15,5 @@ export interface ProductoCatalogo {
   nombre: string;
   precio: number;
   imagen: string;
+  stock: number;
 }

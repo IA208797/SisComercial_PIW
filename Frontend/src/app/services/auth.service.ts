@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { CarritoService } from './carrito.service';
 
 
 @Injectable({
@@ -15,7 +16,8 @@ export class AuthService {
 
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private carritoService: CarritoService
   ) { }
 
 
@@ -83,6 +85,8 @@ export class AuthService {
 
   // Cerrar sesión
   cerrarSesion(){
+
+    this.carritoService.sincronizarCarrito([]);
 
     localStorage.removeItem('token');
 

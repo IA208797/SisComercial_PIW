@@ -57,5 +57,5 @@ export class CarritoService {
   }
   public sincronizarCarrito(nuevosArticulos: ArticuloCarrito[]): void {
   this.carrito.next([...nuevosArticulos]);
-}
+  }
 }

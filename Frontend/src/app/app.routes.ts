@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { ProductoComponent } from './Producto/producto.component';
-import { MenuProductoComponent } from './Producto/menuProducto.component';
+import { ProductoComponent } from './pages/Producto/producto.component';
+import { MenuProductoComponent } from './pages/Producto/menuProducto.component';
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
 import { CanjeRecompensasComponent } from './pages/perfil-lealtad/canje/canje-recompensas.component';
 import { RegistrarVisitaComponent } from './pages/perfil-lealtad/visita/registrar-visita.component';

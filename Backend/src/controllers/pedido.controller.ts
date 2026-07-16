@@ -6,7 +6,7 @@ import { Producto } from "../models/producto.model";
 ////////////Si el de Kevin funciona no usar este
 export const obtenerProductoenPedido =  async (req: Request, res: Response): Promise<void> => {
     try {
-        const productos = await Producto.find({}, '_id nombre precio imagen');
+        const productos = await Producto.find({}, '_id nombre precio imagen stock');
         res.status(200).json({
             success: true,
             data: productos
