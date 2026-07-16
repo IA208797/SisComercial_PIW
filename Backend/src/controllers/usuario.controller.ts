@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Usuario from '../models/usuario.model';
+import { Usuario } from '../models/usuario.model';
+import { Lealtad } from '../models/lealtad.model';
 
 // Registrar usuario
 export const registrarUsuario = async (req: Request, res: Response) => {
     try {
-        const { nombre, correo, telefono, password } = req.body;
+        const { nombre, correo, telefono, password, rol } = req.body;
 
         // Verificar si ya existe el correo
         const usuarioExistente = await Usuario.findOne({ correo });
@@ -25,13 +26,30 @@ export const registrarUsuario = async (req: Request, res: Response) => {
             nombre,
             correo,
             telefono,
-            password: passwordEncriptada
+            password: passwordEncriptada,
+            rol: 'cliente' // Asignar rol por defecto 
         });
 
-        await nuevoUsuario.save();
+        const usuarioGuardado = await nuevoUsuario.save();
+
+        const nuevoPerfilLealtad = new Lealtad({
+            // Usamos el _id recién generado por MongoDB para vincularlos de por vida
+            cliente_id: usuarioGuardado._id,
+            puntos_acumulados: 0,
+            total_visitas: 0,
+            nivel_actual: "Regular",
+            historial_transacciones: [] 
+        });
+
+        await nuevoPerfilLealtad.save();
 
         res.status(201).json({
-            mensaje: 'Usuario registrado correctamente.'
+            mensaje: 'Usuario y perfil de lealtad registrados correctamente.',
+            usuario: {
+                id: usuarioGuardado._id,
+                nombre: usuarioGuardado.nombre,
+                correo: usuarioGuardado.correo
+            }
         });
 
     } catch (error: any) {
@@ -82,6 +100,18 @@ export const loginUsuario = async (req: Request, res: Response) => {
                 expiresIn: "2h"
             }
         );
+
+        let cuentaLealtad = await Lealtad.findById(usuario._id);
+        if (!cuentaLealtad) {
+            cuentaLealtad = new Lealtad({
+                cliente_id: usuario._id,
+                puntos_acumulados: 0,
+                total_visitas: 0,
+                nivel_actual: "Regular",
+                historial_transacciones: []
+            });
+            await cuentaLealtad.save();
+        }
 
         // Respuesta
         res.status(200).json({

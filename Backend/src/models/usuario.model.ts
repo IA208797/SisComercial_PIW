@@ -1,7 +1,14 @@
-import mongoose from 'mongoose';
+import { Schema, Document, model} from 'mongoose';
 
-const usuarioSchema = new mongoose.Schema(
-  {
+export interface IUsuario extends Document {
+  nombre: string;
+  correo: string;
+  telefono: string;
+  password: string;
+  rol: 'cliente' | 'admin';
+}
+
+const usuarioSchema = new Schema<IUsuario>({
     nombre: {
       type: String,
       required: true,
@@ -25,12 +32,15 @@ const usuarioSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    rol: {
+      type: String,
+      enum: ['cliente', 'admin'],
+      default: 'cliente',
+    }
   },
   {
     timestamps: true,
   }
 );
 
-const Usuario = mongoose.model('Usuario', usuarioSchema);
-
-export default Usuario;
+export const Usuario = model<IUsuario>('Usuario', usuarioSchema);
