@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { ReactiveFormsModule, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { RouterLink, Router } from '@angular/router';
 
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -14,7 +15,7 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
@@ -22,7 +23,8 @@ export class Registro {
   registroForm;
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.registroForm = this.fb.group({
       nombre: [
@@ -52,7 +54,8 @@ export class Registro {
           Validators.required,
           Validators.minLength(8),
           Validators.pattern(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/
+            // Esta regex permite letras, números y CUALQUIER símbolo especial
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/
           )
         ]
       ],
@@ -89,10 +92,8 @@ export class Registro {
     };
 
     this.authService.registrar(datos).subscribe({
-      next: (respuesta) => {
-        alert("Usuario registrado correctamente.");
-        console.log(respuesta);
-        this.registroForm.reset();
+      next: () => {
+        this.router.navigate(['/menu']);
       },
       error: (error) => {
         console.error(error);

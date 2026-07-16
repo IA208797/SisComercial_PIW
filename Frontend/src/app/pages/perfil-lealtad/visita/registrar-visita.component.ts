@@ -61,4 +61,7 @@ export class RegistrarVisitaComponent {
       }
     });
   }
+
+  // registrarVisita(): void {}
+
 }

@@ -18,6 +18,10 @@ export interface IPedido extends Document {
   estado: 'pendiente' | 'preparando' | 'listo' | 'entregado' | 'cancelado';
   notas?: string;
   fechaCreacion: Date;
+  recompensa_usada?: {
+    descripcion: string;
+    puntos_a_descontar: number;
+  };
 }
 
 
@@ -67,7 +71,11 @@ const PedidoSchema = new Schema<IPedido>({
     },
     default: 'pendiente'
   },
-  notas: { type: String, trim: true }
+  notas: { type: String, trim: true },
+  recompensa_usada: {
+    descripcion: { type: String },
+    puntos_a_descontar: { type: Number }
+  }
 }, {
   timestamps: true
 });

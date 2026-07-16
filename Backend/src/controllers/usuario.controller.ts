@@ -43,8 +43,15 @@ export const registrarUsuario = async (req: Request, res: Response) => {
 
         await nuevoPerfilLealtad.save();
 
+        const token = jwt.sign(
+            { id: usuarioGuardado._id, correo: usuarioGuardado.correo },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "2h" }
+        );
+
         res.status(201).json({
             mensaje: 'Usuario y perfil de lealtad registrados correctamente.',
+            token,
             usuario: {
                 id: usuarioGuardado._id,
                 nombre: usuarioGuardado.nombre,
@@ -100,18 +107,6 @@ export const loginUsuario = async (req: Request, res: Response) => {
                 expiresIn: "2h"
             }
         );
-
-        let cuentaLealtad = await Lealtad.findById(usuario._id);
-        if (!cuentaLealtad) {
-            cuentaLealtad = new Lealtad({
-                cliente_id: usuario._id,
-                puntos_acumulados: 0,
-                total_visitas: 0,
-                nivel_actual: "Regular",
-                historial_transacciones: []
-            });
-            await cuentaLealtad.save();
-        }
 
         // Respuesta
         res.status(200).json({

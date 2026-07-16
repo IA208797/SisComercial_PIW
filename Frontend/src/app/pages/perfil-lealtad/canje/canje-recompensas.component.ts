@@ -1,6 +1,9 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms'; // Necesario para usar ngModel
 import { LealtadService } from '../../../services/lealtad.service';
+import { AuthService } from '../../../services/auth.service'; // <-- Importamos el servicio Esmeralda para obtener el usuario logueado
+import { ILealtadFrontend } from '../../../core/models/lealtad.interface';
+
 
 interface IRecompensaCatalogo {
   descripcion: string;
@@ -13,8 +16,15 @@ interface IRecompensaCatalogo {
   imports: [FormsModule], 
   templateUrl: './canje-recompensas.component.html'
 })
-export class CanjeRecompensasComponent {
+export class CanjeRecompensasComponent implements OnInit { 
   private lealtadService = inject(LealtadService);
+  private authService = inject(AuthService);
+
+  clienteData = signal<ILealtadFrontend | null>(null);
+  isLoading = signal<boolean>(false);
+  errorMensaje = signal<string | null>(null);
+
+  busquedaManual = signal<boolean>(true);
 
   // Catálogo centralizado para evitar discrepancias de datos
   catalogoRecompensas: IRecompensaCatalogo[] = [
@@ -30,6 +40,17 @@ export class CanjeRecompensasComponent {
     puntos_a_descontar: 0,
     descripcion_recompensa: ''
   };
+
+    ngOnInit() {
+    // Al abrir la página, revisamos la "mochila" del LocalStorage
+    const usuarioLogueado = this.authService.obtenerUsuario();
+    if (usuarioLogueado && usuarioLogueado.id) {
+      this.busquedaManual.set(false); // Ocultamos el buscador manual
+      this.datosCanje.cliente_id = usuarioLogueado.id;
+    }else {
+      console.warn("No se encontró usuario o no tiene ID para buscar.");
+    }
+  }
 
   // Estados de la interfaz controlados por Signals
   procesando = signal<boolean>(false);

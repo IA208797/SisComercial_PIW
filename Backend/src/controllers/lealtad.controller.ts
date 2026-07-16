@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Lealtad } from "../models/lealtad.model";
-import  Usuario  from "../models/usuario.model"; 
+import { Usuario } from "../models/usuario.model"; 
 
 // --- FUNCIÓN HELPER (Maneja la lógica pesada y evita errores de tipado) ---
 const buscarUsuarioPorIdOTelefono = async (criterio: string) => {

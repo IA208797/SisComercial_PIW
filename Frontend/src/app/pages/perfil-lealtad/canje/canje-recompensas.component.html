@@ -1,7 +1,5 @@
 <div class="min-h-screen flex flex-col bg-marca-hielo text-marca-gris font-roboto">
-  <!-- Esto no va aqui
-  <app-header></app-header>
-  Esto no va aqui -->
+  
   <main class="mx-auto w-full max-w-3xl grow px-5 py-10">
     
     <div class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200/60 pb-5">
@@ -15,21 +13,36 @@
       </div>
     </div>
 
+    @if (!busquedaManual()) {
+      <div class="mb-8 bg-linear-to-r from-marca-azul to-marca-turquesa text-white rounded-2xl p-6 shadow-md relative overflow-hidden">
+        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        
+        <div class="relative z-10">
+          <h2 class="text-2xl font-bold font-merriweather mb-1 flex items-center gap-2">
+            <span>🎁</span> ¡Es hora de premiarte!
+          </h2>
+          <p class="text-white/90 text-sm font-medium">
+            Selecciona tu recompensa a continuación. Tu solicitud se procesará automáticamente a tu cuenta vinculada.
+          </p>
+        </div>
+      </div>
+    }
+
     @if (mensajeExito()) {
-      <div class="mb-6 rounded-2xl bg-marca-turquesa/10 p-5 shadow-sm border border-marca-turquesa/30">
+      <div class="mb-6 rounded-2xl bg-marca-turquesa/10 p-5 shadow-sm border border-marca-turquesa/30 animate-fade-in">
         <p class="text-marca-azul font-bold flex items-center gap-2">
           <span>✅</span> {{ mensajeExito() }}
         </p>
         @if (saldoRestante() !== null) {
           <p class="mt-2 text-sm text-marca-azul/80 font-medium">
-            Nuevo saldo: <span class="font-bold text-marca-azul">{{ saldoRestante() }} pts</span>
+            Nuevo saldo: <span class="font-bold text-marca-azul text-lg">{{ saldoRestante() }} pts</span>
           </p>
         }
       </div>
     }
 
     @if (mensajeError()) {
-      <div class="mb-6 rounded-2xl bg-red-50 p-5 shadow-sm border border-red-100">
+      <div class="mb-6 rounded-2xl bg-red-50 p-5 shadow-sm border border-red-100 animate-fade-in">
         <p class="text-red-600 font-bold flex items-center gap-2">
           <span>⚠️</span> {{ mensajeError() }}
         </p>
@@ -46,20 +59,22 @@
 
       <form (ngSubmit)="procesarCanje()" #canjeForm="ngForm" class="p-6 md:p-8">
 
-        <div class="mb-5">
-          <label for="cliente_id" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
-            Teléfono o ID del Cliente <span class="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="cliente_id"
-            name="cliente_id"
-            [(ngModel)]="datosCanje.cliente_id"
-            class="w-full px-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa focus:bg-white transition-all text-marca-gris text-sm font-medium placeholder:text-gray-400"
-            placeholder="Ej: 6561234567 o 6a474b11..."
-            required
-          />
-        </div>
+        @if (busquedaManual()) {
+          <div class="mb-5">
+            <label for="cliente_id" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
+              Teléfono o ID del Cliente <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="cliente_id"
+              name="cliente_id"
+              [(ngModel)]="datosCanje.cliente_id"
+              class="w-full px-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-marca-turquesa/30 focus:border-marca-turquesa focus:bg-white transition-all text-marca-gris text-sm font-medium placeholder:text-gray-400"
+              placeholder="Ej: 6561234567 o 6a474b11..."
+              [required]="busquedaManual()"
+            />
+          </div>
+        }
 
         <div class="mb-5">
           <label for="recompensa" class="block text-xs font-bold uppercase tracking-wider text-marca-gris/80 mb-2">
@@ -101,11 +116,11 @@
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3 pt-2 border-t border-gray-100">
+        <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100">
           <button
             type="submit"
-            class="bg-marca-naranja hover:opacity-90 text-white font-bold py-3 px-8 rounded-xl shadow-sm transition-all duration-200 focus:ring-2 focus:ring-marca-naranja/30 outline-none disabled:opacity-40 disabled:cursor-not-allowed text-sm active:scale-[0.98] w-full sm:w-auto"
-            [disabled]="procesando()"
+            class="bg-marca-naranja hover:bg-orange-500 text-white font-bold py-3.5 px-8 rounded-xl shadow-sm transition-all duration-200 focus:ring-2 focus:ring-marca-naranja/30 outline-none disabled:opacity-40 disabled:cursor-not-allowed text-sm active:scale-[0.98] w-full sm:w-auto"
+            [disabled]="procesando() || !datosCanje.descripcion_recompensa"
           >
             {{ procesando() ? 'Procesando Canje...' : 'Aplicar Canje' }}
           </button>
@@ -115,7 +130,4 @@
     </section>
 
   </main>
-  <!-- Esto tampoco va aqui
-  <app-footer></app-footer>
-  Esto tampoco va aqui -->
 </div>

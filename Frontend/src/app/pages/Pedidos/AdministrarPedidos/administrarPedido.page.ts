@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core'; // <-- 1. Importa ChangeDetectorRef
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, signal } from '@angular/core'; // <-- 1. Importa ChangeDetectorRef
 import { CommonModule } from '@angular/common';
 import { PedidoService } from '../../../services/pedido.service';
 import { interval, Subscription } from 'rxjs';
@@ -53,6 +53,7 @@ export class AdminPedidosComponent implements OnInit, OnDestroy {
   public togglePedidosPasados(): void {
     this.mostrarPasados = !this.mostrarPasados;
     this.cargarColaPedidos(); 
+    this.cdr.detectChanges();
   }
 
   public onCambiarEstado(pedido: any, event: Event): void {
