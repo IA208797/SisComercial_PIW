@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, signal } from '@angular/core'; // <-- 1. Importa ChangeDetectorRef
+import { Component, OnInit, OnDestroy, signal } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { PedidoService } from '../../../services/pedido.service';
 import { interval, Subscription } from 'rxjs';
@@ -10,16 +10,13 @@ import { interval, Subscription } from 'rxjs';
   templateUrl: './administrarPedido.page.html'
 })
 export class AdminPedidosComponent implements OnInit, OnDestroy {
-  public listaPedidos: Array<any> = []; 
+  // 1. Convertimos las variables en Signals
+  public listaPedidos = signal<any[]>([]); 
+  public mostrarPasados = signal<boolean>(false);
+  
   private subscripcionIntervalo!: Subscription;
 
-  
-  public mostrarPasados: boolean = false;
-
-  constructor(
-    private readonly pedidoService: PedidoService,
-    private readonly cdr: ChangeDetectorRef
-  ) {}
+  constructor(private readonly pedidoService: PedidoService) {}
 
   ngOnInit(): void {
     this.cargarColaPedidos();
@@ -36,24 +33,22 @@ export class AdminPedidosComponent implements OnInit, OnDestroy {
   }
 
   public cargarColaPedidos(): void {
-    this.pedidoService.obtenerPedidosAdmin(this.mostrarPasados).subscribe({
+    // 2. Extraemos el valor del signal con ()
+    this.pedidoService.obtenerPedidosAdmin(this.mostrarPasados()).subscribe({
       next: (response) => {
         if (response.success) {
-          this.listaPedidos = response.data;
-          this.cdr.detectChanges(); 
+          // 3. Actualizamos la señal con .set()
+          this.listaPedidos.set(response.data);
         }
       },
       error: (err) => console.error('Error al actualizar la cola:', err)
     });
   }
 
- ////////////////
- // Mostrar los pedidos pasados
- ///////////////
   public togglePedidosPasados(): void {
-    this.mostrarPasados = !this.mostrarPasados;
+    // 4. Alternamos el valor del boolean y recargamos
+    this.mostrarPasados.update(valorActual => !valorActual);
     this.cargarColaPedidos(); 
-    this.cdr.detectChanges();
   }
 
   public onCambiarEstado(pedido: any, event: Event): void {

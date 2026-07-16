@@ -218,7 +218,7 @@ export const cambiarEstadoPedido = async (req: Request, res: Response): Promise<
     }
 
     // Prevenir doble reversión de puntos
-    if (nuevoEstado === 'cancelado' && pedido.estado !== 'cancelado') {
+    if (nuevoEstado === 'cancelado' && pedido.estado === 'cancelado') {
       res.status(400).json({ success: false, message: 'El pedido ya se encuentra cancelado.' });
       return;
     }

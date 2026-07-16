@@ -9,18 +9,18 @@
         type="button"
         (click)="togglePedidosPasados()"
         [class]="
-          mostrarPasados
+          mostrarPasados()
             ? 'bg-marca-naranja text-white hover:bg-opacity-90'
             : 'bg-marca-azul text-white hover:bg-opacity-90'
         "
         class="font-bold py-2.5 px-6 rounded-xl shadow-md transition-all duration-300 flex items-center gap-2 cursor-pointer text-sm sm:text-base"
       >
-        {{ mostrarPasados ? 'Ocultar Historial Pasado' : 'Ver todos los pedidos pasados' }}
+        {{ mostrarPasados() ? 'Ocultar Historial Pasado' : 'Ver todos los pedidos pasados' }}
       </button>
     </div>
   </div>
 
-  @if (listaPedidos.length === 0) {
+  @if (listaPedidos().length === 0) {
     <div
       class="max-w-7xl mx-auto bg-white p-10 rounded-2xl shadow-sm text-center border border-gray-100"
     >
@@ -29,7 +29,7 @@
     </div>
   } @else {
     <div
-      [class]="mostrarPasados ? 'lg:grid-cols-4 max-w-380' : 'lg:grid-cols-3 max-w-7xl'"
+      [class]="mostrarPasados() ? 'lg:grid-cols-4 max-w-380' : 'lg:grid-cols-3 max-w-7xl'"
       class="mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 items-start transition-all duration-300"
     >
       <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200">
@@ -37,7 +37,7 @@
           Pendientes de confirmar
         </h2>
         <div class="space-y-4">
-          @for (pedido of listaPedidos; track pedido._id || $index) {
+          @for (pedido of listaPedidos(); track pedido._id || $index) {
             @if (pedido.estado === 'pendiente') {
               <div
                 class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden"
@@ -55,7 +55,7 @@
                   >
                 </div>
                 <h3 class="text-lg font-black text-marca-gris truncate font-merriweather">
-                  {{ pedido.clienteNombre || pedido.clienteId }}
+                  {{ (pedido.clienteNombre || pedido.clienteId) | titlecase }}
                 </h3>
                 <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
                 <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
@@ -63,7 +63,7 @@
                     <p class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
                   }
                   <ul class="space-y-1">
-                    @for (art of pedido.articulos; track art._id) {
+                    @for (art of pedido.articulos; track $index) {
                       <li class="text-gray-600 text-xs font-medium">
                         {{ art.cantidad }}x {{ art.nombre }}
                       </li>
@@ -93,7 +93,7 @@
           En Preparación
         </h2>
         <div class="space-y-4">
-          @for (pedido of listaPedidos; track pedido._id || $index) {
+          @for (pedido of listaPedidos(); track pedido._id || $index) {
             @if (pedido.estado === 'preparando') {
               <div
                 class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden"
@@ -110,14 +110,14 @@
                     >{{ pedido.createdAt | date: 'shortTime' }}</span
                   >
                 </div>
-                <h3 class="text-lg font-black text-marca-gris truncate font-merriweather">{{ pedido.clienteNombre || pedido.clienteId }}</h3>
+                <h3 class="text-lg font-black text-marca-gris truncate font-merriweather">{{ (pedido.clienteNombre || pedido.clienteId) | titlecase }}</h3>
                 <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
                 <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
                   @if (pedido.notas) {
                     <p class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
                   }
                   <ul class="space-y-1">
-                    @for (art of pedido.articulos; track art._id) {
+                    @for (art of pedido.articulos; track $index) {
                       <li class="text-gray-600 text-xs font-medium">
                         {{ art.cantidad }}x {{ art.nombre }}
                       </li>
@@ -147,7 +147,7 @@
           Listos para Recoger
         </h2>
         <div class="space-y-4">
-          @for (pedido of listaPedidos; track pedido._id || $index) {
+          @for (pedido of listaPedidos(); track pedido._id || $index) {
             @if (pedido.estado === 'listo') {
               <div
                 class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 relative overflow-hidden"
@@ -164,14 +164,14 @@
                     >{{ pedido.createdAt | date: 'shortTime' }}</span
                   >
                 </div>
-                <h3 class="text-lg font-black text-marca-gris truncate font-merriweather">{{ pedido.clienteNombre || pedido.clienteId }}</h3>
+                <h3 class="text-lg font-black text-marca-gris truncate font-merriweather">{{ (pedido.clienteNombre || pedido.clienteId) | titlecase }}</h3>
                 <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
                 <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
                   @if (pedido.notas) {
                     <p class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>
                   }
                   <ul class="space-y-1">
-                    @for (art of pedido.articulos; track art._id) {
+                    @for (art of pedido.articulos; track $index) {
                       <li class="text-gray-600 text-xs font-medium">
                         {{ art.cantidad }}x {{ art.nombre }}
                       </li>
@@ -203,7 +203,7 @@
         </div>
       </div>
 
-      @if (mostrarPasados) {
+      @if (mostrarPasados()) {
         <div
           class="bg-gray-100 rounded-2xl p-4 border border-gray-300 border-dashed animate-fade-in"
         >
@@ -211,7 +211,7 @@
             Historial Terminado
           </h2>
           <div class="space-y-4">
-            @for (pedido of listaPedidos; track pedido._id || $index) {
+            @for (pedido of listaPedidos(); track pedido._id || $index) {
               @if (pedido.estado === 'entregado' || pedido.estado === 'cancelado') {
                 <div
                   class="bg-white/80 rounded-xl border border-gray-200 p-5 opacity-85 hover:opacity-100 transition relative overflow-hidden shadow-xs"
@@ -239,12 +239,12 @@
                     </span>
                   </div>
 
-                  <h3 class="text-base font-bold text-gray-500 truncate font-merriweather">{{ pedido.clienteNombre || pedido.clienteId }}</h3>
+                  <h3 class="text-base font-bold text-gray-500 truncate font-merriweather">{{ (pedido.clienteNombre || pedido.clienteId) | titlecase }}</h3>
                   <p class="text-lg font-black text-gray-400 mt-0.5">${{ pedido.total }}</p>
 
                   <div class="bg-gray-50 rounded-lg p-2.5 text-xs mt-2 text-gray-400">
                     <ul class="space-y-0.5">
-                      @for (art of pedido.articulos; track art._id) {
+                      @for (art of pedido.articulos; track $index) {
                         <li class="text-gray-600 text-xs font-medium">
                           {{ art.cantidad }}x {{ art.nombre }}
                         </li>
