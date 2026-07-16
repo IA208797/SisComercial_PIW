@@ -5,6 +5,7 @@ export interface ArticuloPedido {
 
 export interface Pedido {
   clienteId: string;
+  clienteNombre: string;
   articulos: ArticuloPedido[];
   notas?: string;
 }

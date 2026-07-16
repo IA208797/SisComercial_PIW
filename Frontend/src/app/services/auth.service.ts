@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 
 @Injectable({
@@ -10,6 +10,8 @@ export class AuthService {
 
 
   private apiUrl = 'http://localhost:4000/api/usuarios';
+  private logueadoSubject = new BehaviorSubject<boolean>(!!this.obtenerToken());
+  public estaLogueado$ = this.logueadoSubject.asObservable();
 
 
   constructor(
@@ -32,7 +34,7 @@ export class AuthService {
 
   // Login
   login(datos:any):Observable<any>{
-
+    this.logueadoSubject.next(true);
     return this.http.post(
       `${this.apiUrl}/login`,
       datos
@@ -85,6 +87,8 @@ export class AuthService {
     localStorage.removeItem('token');
 
     localStorage.removeItem('usuario');
+
+    this.logueadoSubject.next(false);
 
   }
 

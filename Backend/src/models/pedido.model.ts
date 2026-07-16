@@ -11,6 +11,7 @@ interface IArticuloPedido {
 
 export interface IPedido extends Document {
   clienteId: string;
+  clienteNombre: string;
   articulos: IArticuloPedido[];
   total: number;
   estado: 'pendiente' | 'preparando' | 'listo' | 'entregado' | 'cancelado';
@@ -38,6 +39,11 @@ const PedidoSchema = new Schema<IPedido>({
   clienteId: {
     type: String,
     required: [true, 'El ID del cliente es obligatorio'],
+    trim: true
+  },
+  clienteNombre: {
+    type: String,
+    required: [false, 'El nombre del cliente es obligatorio'],
     trim: true
   },
   articulos: {

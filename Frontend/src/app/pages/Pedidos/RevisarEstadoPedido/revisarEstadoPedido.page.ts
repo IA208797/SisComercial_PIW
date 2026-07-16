@@ -11,7 +11,6 @@ import { interval, Subscription } from 'rxjs';
 
 export class MisPedidosComponent implements OnInit, OnDestroy {
   public listaPedidos: any[] = [];
-  
   public tieneSesionActiva: boolean = false;
   public clienteLogueadoId: string = '';
 
@@ -36,11 +35,16 @@ export class MisPedidosComponent implements OnInit, OnDestroy {
 
   private verificarSesionUsuario(): void {
     /////Cuando sepa como se optiene el usuario se pone aqui
-    const tokenSimulado = 'UsuariodePrueba';
+    const tokenSimulado = localStorage.getItem("token");
+    const datosUsuario =  localStorage.getItem("usuario"); 
+    
 
-    if (tokenSimulado) {
+    if (tokenSimulado && datosUsuario) {
+      
+      const JSONUsuario =  JSON.parse(datosUsuario); 
       this.tieneSesionActiva = true;
-      this.clienteLogueadoId = 'UsuariodePrueba'; 
+      
+      this.clienteLogueadoId = JSONUsuario.id; 
       
       
       this.cargarHistorial();

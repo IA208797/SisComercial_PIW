@@ -40,7 +40,7 @@
               <span class="text-xs text-gray-400 font-mono">#{{ (pedido._id ? pedido._id.toString().slice(-5).toUpperCase() : '-----') }}</span>
               <span class="text-[10px] font-bold text-marca-azul bg-marca-turquesa/10 px-2 py-1 rounded-md">{{ pedido.createdAt | date:'shortTime' }}</span>
             </div>
-            <h3 class="text-lg font-black text-marca-gris truncate">{{ pedido.clienteId }}</h3>
+            <h3 class="text-lg font-black text-marca-gris truncate">{{ pedido.clienteNombre }}</h3>
             <p class="text-xl font-black text-marca-naranja mt-1">${{ pedido.total }}</p>
             <div class="bg-marca-hielo rounded-lg p-3 text-sm mt-3">
               <p *ngIf="pedido.notas" class="text-xs italic text-gray-500 mb-2">"{{ pedido.notas }}"</p>

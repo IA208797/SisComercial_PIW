@@ -23,7 +23,7 @@ export const obtenerProductoenPedido =  async (req: Request, res: Response): Pro
 
 export const realizarPedido = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { clienteId, articulos, notas } = req.body;
+        const { clienteId, clienteNombre, articulos, notas } = req.body;
 
         if (!articulos || articulos.length === 0) {
             res.status(400).json({ success: false, message: 'El pedido no puede estar vacío.' });
@@ -56,6 +56,7 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
 
         const nuevoPedido = new PedidoModel({
             clienteId,
+            clienteNombre, 
             articulos: articulosProcesados,
             total: totalCalculado, 
             notas

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PedidoService } from '../../../services/pedido.service';
 import { Pedido, ProductoCatalogo } from '../../../core/models/pedido.interface';
 import { CarritoService, ArticuloCarrito } from '../../../services/carrito.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ComponentePedido',
@@ -17,15 +18,18 @@ export class ConfirmacionPedidoComponent implements OnInit {
   public catalogoProductos: ProductoCatalogo[] = [];
   public articulosPrecargados: ArticuloCarrito[] = [];
   public totalVisual: number = 0;
+  public nombreCliente: string = 'Cliente General';
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly pedidoService: PedidoService,
     private readonly carritoService: CarritoService,
-    private readonly cdr: ChangeDetectorRef
+    private readonly cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     this.pedidoForm = this.fb.group({
       clienteId: ['', [Validators.required]],
+      clienteNombre: ['', [Validators.required]],
       articulos: this.fb.array([]),
       notas: ['']
     });
@@ -34,6 +38,8 @@ export class ConfirmacionPedidoComponent implements OnInit {
   ngOnInit(): void {
     this.articulosPrecargados = this.carritoService.obtenerValorActual();
     this.cargarCatalogo();
+    this.obtenerUsuario();
+
   }
 
   // OBSOLETO
@@ -53,13 +59,13 @@ export class ConfirmacionPedidoComponent implements OnInit {
   //   });
   // }
 
- private cargarCatalogo(): void {
+  private cargarCatalogo(): void {
     this.pedidoService.obtenerProductos().subscribe({
       next: (response) => {
         if (response.success) {
           this.catalogoProductos = response.data;
-          
-          // Limpiamos por seguridad el FormArray antes de llenarlo
+
+
           this.articulos.clear();
 
           if (this.articulosPrecargados.length > 0) {
@@ -136,44 +142,73 @@ export class ConfirmacionPedidoComponent implements OnInit {
   // }
 
   public calcularTotal(): void {
-  let acumulado = 0;
-  const nuevosArticulosCarrito: ArticuloCarrito[] = [];
+    let acumulado = 0;
+    const nuevosArticulosCarrito: ArticuloCarrito[] = [];
 
-  this.articulos.controls.forEach((control) => {
-    const prodId = control.get('productoId')?.value;
-    const cantidad = control.get('cantidad')?.value || 0;
+    this.articulos.controls.forEach((control) => {
+      const prodId = control.get('productoId')?.value;
+      const cantidad = control.get('cantidad')?.value || 0;
 
-    const productoEncontrado = this.catalogoProductos.find(p => p._id === prodId);
+      const productoEncontrado = this.catalogoProductos.find(p => p._id === prodId);
 
-    if (productoEncontrado) {
-      acumulado += productoEncontrado.precio * cantidad;
-      
-      if (cantidad > 0) {
-        nuevosArticulosCarrito.push({
-          productoId: productoEncontrado._id,
-          nombre: productoEncontrado.nombre,
-          precio: productoEncontrado.precio,
-          cantidad: cantidad,
-          imagen: productoEncontrado.imagen
-        });
+      if (productoEncontrado) {
+        acumulado += productoEncontrado.precio * cantidad;
+
+        if (cantidad > 0) {
+          nuevosArticulosCarrito.push({
+            productoId: productoEncontrado._id,
+            nombre: productoEncontrado.nombre,
+            precio: productoEncontrado.precio,
+            cantidad: cantidad,
+            imagen: productoEncontrado.imagen
+          });
+        }
       }
-    }
-  });
+    });
 
-  this.totalVisual = acumulado;
+    this.totalVisual = acumulado;
 
-  // Enviamos el estado actualizado del formulario al servicio global de forma síncrona
-  this.carritoService.sincronizarCarrito(nuevosArticulosCarrito);
-}
+    // Enviamos el estado actualizado del formulario al servicio global de forma síncrona
+    this.carritoService.sincronizarCarrito(nuevosArticulosCarrito);
+  }
 
-  public obtenerImagenProducto( idProducto: string): string {
-    if (!idProducto){
+  public obtenerImagenProducto(idProducto: string): string {
+    if (!idProducto) {
       return '';
     }
     const imagenProducto = this.catalogoProductos.find(p => p._id == idProducto);
     console.log(imagenProducto);
-    return imagenProducto?.imagen || 'https://klipy.com/gifs/inzaynia-twitch-2/player';  
+    return imagenProducto?.imagen || 'https://klipy.com/gifs/inzaynia-twitch-2/player';
 
+  }
+
+  public obtenerUsuario(): string {
+
+    const datosGuardados = localStorage.getItem("usuario");
+
+    if (datosGuardados) {
+      try {
+        const objetoJson = JSON.parse(datosGuardados);
+        //console.log(objetoJson)
+        const NombreUsuario = objetoJson.nombre;
+        this.nombreCliente = NombreUsuario;
+        //console.log(NomnbreUsuario)
+        this.pedidoForm.patchValue({
+          clienteId: objetoJson.id,
+          clienteNombre: NombreUsuario
+        });
+        console.log(this.pedidoForm)
+        return NombreUsuario;
+
+      } catch (error) {
+
+        console.error('Error al transformar los datos del localStorage', error);
+        return '';
+      }
+    } else {
+      console.log('No se encontró nada en el localStorage con esa llave.');
+      return 'Sesión no iniciada';
+    }
   }
 
   public onSubmit(): void {
@@ -187,9 +222,10 @@ export class ConfirmacionPedidoComponent implements OnInit {
     this.pedidoService.crearPedido(payload).subscribe({
       next: (response) => {
         //alert(`Totlal del pedido: $${response.data.total}`);
-        this.pedidoForm.reset({ clienteId: '', notas: '' });
+        this.pedidoForm.reset({ clienteId: '',clienteNombre: '', notas: '' });
         this.articulos.clear();
         this.agregarArticulo();
+        this.router.navigate(['cliente/misPedidos']);
       },
       error: (error) => {
         alert(error.error?.message || 'Error al guardar el pedido.');
