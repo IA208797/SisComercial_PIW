@@ -66,6 +66,7 @@ export class DashboardClienteComponent implements OnInit { // <-- Implementamos 
     this.lealtadService.obtenerClientePorId(valorBusqueda).subscribe({
       next: (data) => {
         this.clienteData.set(data);
+        //this.usuario.nombre= valorBusqueda;
         this.isLoading.set(false);
       },
       error: (err) => {
