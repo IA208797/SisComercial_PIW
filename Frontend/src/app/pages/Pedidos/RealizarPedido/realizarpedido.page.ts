@@ -71,6 +71,9 @@ export class ConfirmacionPedidoComponent implements OnInit {
       this.lealtadService.obtenerClientePorId(usuario.id).subscribe({
         next: (data) => {
           this.puntosDisponibles = data.puntos_acumulados;
+          
+          // LA SOLUCIÓN: Le avisamos a Angular que actualice la vista inmediatamente
+          this.cdr.detectChanges(); 
         },
         error: (err) => console.error('Error al obtener datos de lealtad:', err)
       });

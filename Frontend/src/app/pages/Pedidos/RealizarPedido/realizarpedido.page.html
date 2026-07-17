@@ -99,7 +99,7 @@
                 <div
                   class="w-full border border-gray-200 rounded-lg p-2.5 bg-marca-hielo text-black font-medium"
                 >
-                  {{ nombreCliente }}
+                  {{ nombreCliente | titlecase}}
                 </div>
               </div>
               <!-- Cuando este lo de perla hay que cambiar esta seccion para obtener el nombre del cliente en base a la base de datos -->
@@ -112,6 +112,8 @@
                 <option value="">Selecciona una opción</option>
                 <option value="Bebida Gratis">Bebida Gratis (20 pts)</option>
                 <option value="Descuento del 10%">Descuento del 10% (50 pts)</option>
+                <option value="Articulo promocional">Artículo promocional (100 pts)</option>
+                <option value="Cupón VIP">Cupón VIP (150 pts)</option>
               </select>
             </div>
           
