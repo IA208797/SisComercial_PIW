@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Lealtad } from "../models/lealtad.model";
-import { Usuario } from "../models/usuario.model"; 
+import { Usuario } from "../models/usuario.model";
+
+
+// //NOTA GLOBAL//
+// La carpeta controllers contiene todos los archivos .ts que contienen todo la lógica de las funciones para la comunicación 
+// con la base de datos básicamente reciben las solicitudes de la página y conectan con la base de datos para obtener lo que 
+// se necesita, para una mayor organización la rutas de conexión están separadas en su propia carpeta, routes
+
+
 
 // --- FUNCIÓN HELPER (Maneja la lógica pesada y evita errores de tipado) ---
 const buscarUsuarioPorIdOTelefono = async (criterio: string) => {

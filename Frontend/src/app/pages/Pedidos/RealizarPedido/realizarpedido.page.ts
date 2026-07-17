@@ -265,7 +265,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
       return '';
     }
     const imagenProducto = this.catalogoProductos.find(p => p._id == idProducto);
-    console.log(imagenProducto);
+    //console.log(imagenProducto);
     return imagenProducto?.imagen || 'https://klipy.com/gifs/inzaynia-twitch-2/player';
 
   }

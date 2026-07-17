@@ -1,5 +1,10 @@
 import { Schema, Document, model} from 'mongoose';
 
+// //NOTA GLOBAL//
+// La carpeta models contiene la estructura de la información que se va guardad/solicitar a la base de datos, como mongo 
+// puede almacenar casi cualquier tipo de dato es mejor estar 100% seguro de lo que queremos guardar antes de hacer las
+// solicitudes 
+
 export interface IUsuario extends Document {
   nombre: string;
   correo: string;

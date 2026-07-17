@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import { Producto } from '../models/producto.model';
 
+// //NOTA GLOBAL//
+// La carpeta controllers contiene todos los archivos .ts que contienen todo la lógica de las funciones para la comunicación 
+// con la base de datos básicamente reciben las solicitudes de la página y conectan con la base de datos para obtener lo que 
+// se necesita, para una mayor organización la rutas de conexión están separadas en su propia carpeta, routes
+
 export const guardarProducto = async (req: Request, res: Response): Promise<void> => {
   try {
     const { nombre, descripcion, precio, stock, categoria, imagen } = req.body;

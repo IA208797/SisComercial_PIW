@@ -4,6 +4,14 @@ import jwt from 'jsonwebtoken';
 import { Usuario } from '../models/usuario.model';
 import { Lealtad } from '../models/lealtad.model';
 
+// //NOTA GLOBAL//
+// La carpeta controllers contiene todos los archivos .ts que contienen todo la lógica de las funciones para la comunicación 
+// con la base de datos básicamente reciben las solicitudes de la página y conectan con la base de datos para obtener lo que 
+// se necesita, para una mayor organización la rutas de conexión están separadas en su propia carpeta, routes.
+// Es importante destacar dos puntos aquí, como manejamos contraseñas la seguridad de esa información es importante, no pueden
+// ser mandadas como texto plano deben ser encriptadas, para eso usamos la librería de Node bcrypt pero esa es solo una parte de
+// la seguridad también usamos JWT para generar la key que será almacenada en el localstorage cuando llegue al frontend
+
 // Registrar usuario
 export const registrarUsuario = async (req: Request, res: Response) => {
     try {
