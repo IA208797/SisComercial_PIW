@@ -12,6 +12,7 @@ import { Login } from './pages/usuario/login/login';
 import { Registro } from './pages/usuario/registro/registro';
 import { Perfil } from './pages/usuario/perfil/perfil';
 import { authGuard } from './guards/auth.guard';
+import { adminGuard } from './guards/admin.guards';
 
 export const routes: Routes = [
   // Redirección inicial
@@ -34,16 +35,29 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardAdminComponent, // URL: /admin/dashboard
+        canActivate: [adminGuard] // <-- Candado
       },
       {
         path: 'productos',
         component: ProductoComponent, // URL: /admin/productos
+        canActivate: [adminGuard] // <-- Candado
       },
       {
         path: 'pedidos',
-        component: AdminPedidosComponent
-
-      }
+        component: AdminPedidosComponent, // URL: /admin/pedidos
+        canActivate: [adminGuard] // <-- Candado
+      },
+        // Registro de visitas (externo o rápido)
+      {
+        path: 'registrar',
+        component: RegistrarVisitaComponent, // URL: admin/registrar
+        canActivate: [adminGuard] // <-- Candado
+      },      
+      {
+        path: 'canje',
+        component: CanjeRecompensasComponent, // URL: /admin/canje
+        canActivate: [adminGuard] // <-- Candado
+      },
     ]
   },
 
@@ -55,10 +69,6 @@ export const routes: Routes = [
       {
         path: 'cuenta',
         component: DashboardClienteComponent, // URL: /cliente/cuenta
-      },
-      {
-        path: 'canje',
-        component: CanjeRecompensasComponent, // URL: /cliente/canje
       },
       {
         path: 'misPedidos',
@@ -76,11 +86,7 @@ export const routes: Routes = [
     ]
   },
 
-  // Registro de visitas (externo o rápido)
-  {
-    path: 'registrar',
-    component: RegistrarVisitaComponent, // URL: /registrar
-  },
+
   // ==============================
   // MÓDULO USUARIOS
   // ==============================
