@@ -7,7 +7,7 @@ import { Lealtad } from "../models/lealtad.model";
 ////////////Si el de Kevin funciona no usar este
 export const obtenerProductoenPedido = async (req: Request, res: Response): Promise<void> => {
   try {
-    const productos = await Producto.find({}, '_id nombre precio imagen stock');
+    const productos = await Producto.find({}, '_id nombre precio imagen stock categoria');
     res.status(200).json({
       success: true,
       data: productos

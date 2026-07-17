@@ -15,8 +15,10 @@ export class Header implements OnInit {
   public rolUsuario: string = 'cliente';
   private authSubscription!: Subscription;
   private authRolSubscription!: Subscription;
+  public usuario: any;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService
+  ) { this.usuario = this.authService.obtenerUsuario(); }
 
   ngOnInit(): void {
 

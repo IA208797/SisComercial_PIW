@@ -7,6 +7,7 @@ interface IArticuloPedido {
   cantidad: number;
   precioUnitario: number;
   stock: number;
+  categoria: string;
 }
 
 
@@ -37,7 +38,8 @@ const ArticuloPedidoSchema = new Schema<IArticuloPedido>({
     type: Number,
     required: true,
     min: [0, 'El precio no puede ser negativo']
-  }
+  },
+  categoria: { type: String, required: true, trim: true }
 }, { _id: false });
 
 const PedidoSchema = new Schema<IPedido>({

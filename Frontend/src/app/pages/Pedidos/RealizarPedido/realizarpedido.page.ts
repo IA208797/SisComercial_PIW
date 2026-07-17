@@ -181,16 +181,14 @@ export class ConfirmacionPedidoComponent implements OnInit {
 
     this.articulos.controls.forEach((control) => {
       const prodId = control.get('productoId')?.value;
-      // Usamos 'let' en lugar de 'const' para poder modificar la cantidad si se pasa del stock
       let cantidad = control.get('cantidad')?.value || 0; 
 
       const productoEncontrado = this.catalogoProductos.find(p => p._id === prodId);
 
       if (productoEncontrado) {
         if (cantidad > productoEncontrado.stock) {
-          alert(` Solo hay ${productoEncontrado.stock} unidades de ${productoEncontrado.nombre} disponibles.`);
+          alert(`Solo hay ${productoEncontrado.stock} unidades de ${productoEncontrado.nombre} disponibles.`);
           cantidad = productoEncontrado.stock;
-          
           control.get('cantidad')?.setValue(cantidad, { emitEvent: false });
         }
 
@@ -208,33 +206,57 @@ export class ConfirmacionPedidoComponent implements OnInit {
       }
     });
 
-  this.subtotalVisual = acumulado; // Guardamos el subtotal antes de aplicar descuentos
-  this.descuentoVisual = 0; // Inicializamos el descuento
+    this.subtotalVisual = acumulado; 
+    this.descuentoVisual = 0; 
 
-  // Aplicamos el descuento si hay una recompensa seleccionada
-  if (this.recompensaAplicada) {
-    if (this.recompensaAplicada.descripcion === 'Descuento del 10%') {
-      this.descuentoVisual = acumulado * 0.10; // 10% de descuento
-    }
-    else if (this.recompensaAplicada.descripcion === 'Bebida Gratis' || this.recompensaAplicada.descripcion === 'Producto Promocional') {
-        // Busca si hay al menos un producto en el carrito para descontarle el equivalente al más barato
-        if (this.articulos.length > 0) {
-           // Por simplicidad, damos un descuento fijo de $50 (ajusta el valor de tu bebida)
-           this.descuentoVisual = 50; 
+    // Aplicamos el descuento si hay una recompensa seleccionada
+    if (this.recompensaAplicada) {
+      if (this.recompensaAplicada.descripcion === 'Descuento del 10%') {
+        this.descuentoVisual = acumulado * 0.10; 
+      }
+      else if (this.recompensaAplicada.descripcion === 'Bebida Gratis') {
+        // Buscamos si existe al menos una bebida en el carrito basándonos en la categoría
+        const bebidasEnCarrito = nuevosArticulosCarrito.filter((art) => {
+           // NOTA: Asegúrate de que la interfaz 'ProductoCatalogo' incluya la propiedad 'categoria: string;'
+           const prod = this.catalogoProductos.find(p => p._id === art.productoId);
+           return prod && (prod as any).categoria && (prod as any).categoria.toLowerCase() === 'bebidas';
+        });
+
+        if (bebidasEnCarrito.length > 0) {
+          // Descontamos exactamente el valor de la bebida más barata agregada
+          this.descuentoVisual = Math.min(...bebidasEnCarrito.map(b => b.precio));
+        } else {
+          alert('Debes agregar al menos una bebida al carrito para usar esta recompensa.');
+          this.quitarRecompensa();
+          return; // Salimos para evitar recalcular incorrectamente
+        }
+      }
+      else if (this.recompensaAplicada.descripcion === 'Producto Promocional') {
+        const promosEnCarrito = nuevosArticulosCarrito.filter((art) => {
+           const prod = this.catalogoProductos.find(p => p._id === art.productoId);
+           return prod && (prod as any).categoria && (prod as any).categoria.toLowerCase() === 'promo';
+        });
+
+        if (promosEnCarrito.length > 0) {
+          this.descuentoVisual = Math.min(...promosEnCarrito.map(p => p.precio));
+        } else {
+          alert('Debes agregar el producto promocional al carrito.');
+          this.quitarRecompensa();
+          return;
         }
       }
       else if (this.recompensaAplicada.descripcion === 'Cupón Especial VIP') {
-        this.descuentoVisual = 150; // Descuento de $150
+        this.descuentoVisual = 150; 
       }
     }
 
-  // Evitamos que el total sea negativo
-  this.totalVisual = Math.max(0, this.subtotalVisual - this.descuentoVisual);
+    // Evitamos que el total sea negativo
+    this.totalVisual = Math.max(0, this.subtotalVisual - this.descuentoVisual);
 
-    // Enviamos el estado actualizado del formulario al servicio global de forma síncrona
+    // Enviamos el estado actualizado al servicio de forma síncrona
     this.carritoService.sincronizarCarrito(nuevosArticulosCarrito);
   }
-
+  
   public obtenerImagenProducto(idProducto: string): string {
     if (!idProducto) {
       return '';
@@ -260,7 +282,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
           clienteId: objetoJson.id,
           clienteNombre: NombreUsuario
         });
-        //console.log(this.pedidoForm)
+        console.log(this.pedidoForm)
         return NombreUsuario;
 
       } catch (error) {
@@ -277,11 +299,24 @@ export class ConfirmacionPedidoComponent implements OnInit {
   // Métodos para los botones de la interfaz
   public aplicarRecompensa(evento: any): void {
     const descripcion = evento.target.value;
+
+    // Si el usuario regresa el select a "Selecciona una opción" (value vacío)
+    if (!descripcion) {
+      this.quitarRecompensa();
+      return;
+    }
+
     const recompensa = this.catalogoRecompensas.find(r => r.descripcion === descripcion);
     
-    if (recompensa && this.puntosDisponibles >= recompensa.puntos) {
-      this.recompensaAplicada = recompensa;
-      this.calcularTotal();
+    if (recompensa) {
+      // Validamos si tiene los puntos suficientes
+      if (this.puntosDisponibles >= recompensa.puntos) {
+        this.recompensaAplicada = recompensa;
+        this.calcularTotal();
+      } else {
+        alert('No tienes suficientes puntos para esta recompensa.');
+        this.quitarRecompensa(); // Regresamos la interfaz al estado original
+      }
     }
   }
 
