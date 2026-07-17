@@ -38,6 +38,11 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
 
     let totalCalculado = 0;
     const articulosProcesados = [];
+    
+    // Arreglos para guardar los precios de los artículos que aplican para descuentos
+    const preciosBebidas: number[] = [];
+    const preciosPromos: number[] = [];
+
     for (const item of articulos) {
       const productoBD = await Producto.findById(item.productoId);
 
@@ -53,31 +58,61 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
           success: false,
           message: `Stock insuficiente para ${productoBD.nombre}. Solo quedan ${productoBD.stock}.`
         });
+        return; // <-- FIX: Faltaba este return para detener la ejecución si no hay stock
       }
+      
       productoBD.stock -= item.cantidad;
       await productoBD.save();
 
-
       const precioReal = productoBD.precio;
       const nombreReal = productoBD.nombre;
+      
+      // Extraemos la categoría directamente de la Base de Datos por seguridad
+      const categoriaReal = (productoBD as any).categoria || 'General';
+
       totalCalculado += precioReal * item.cantidad;
+      
       articulosProcesados.push({
         productoId: item.productoId,
         nombre: nombreReal,
         cantidad: item.cantidad,
-        precioUnitario: precioReal
+        precioUnitario: precioReal,
+        categoria: categoriaReal // <-- FIX: Esto soluciona definitivamente el error de Mongoose
       });
+
+      // LÓGICA DE DETECCIÓN DINÁMICA DE CATEGORÍAS PARA DESCUENTOS
+      const categoriaNormalizada = String(categoriaReal).toLowerCase();
+      if (categoriaNormalizada.includes('bebida')) {
+        preciosBebidas.push(precioReal);
+      }
+      if (categoriaNormalizada.includes('promo')) {
+        preciosPromos.push(precioReal);
+      }
     }
 
-    // Aplicar el descuento directamente en el backend
+    // Aplicar el descuento directamente en el backend (Replicando la lógica del frontend)
     if (recompensa_usada) {
       if (recompensa_usada.descripcion === 'Descuento del 10%') {
         totalCalculado -= (totalCalculado * 0.10);
-      } else if (recompensa_usada.descripcion === 'Bebida Gratis' || recompensa_usada.descripcion === 'Producto Promocional') {
-        totalCalculado -= 50; // Asegúrate de que este valor coincida con la lógica de tu frontend
-      } else if (recompensa_usada.descripcion === 'Cupón Especial VIP') {
+      } 
+      else if (recompensa_usada.descripcion === 'Bebida Gratis') {
+        if (preciosBebidas.length > 0) {
+          // Buscamos la bebida más barata y descontamos su valor
+          const descuentoBebida = Math.min(...preciosBebidas);
+          totalCalculado -= descuentoBebida;
+        }
+      } 
+      else if (recompensa_usada.descripcion === 'Producto Promocional') {
+        if (preciosPromos.length > 0) {
+          // Buscamos la promo más barata y descontamos su valor
+          const descuentoPromo = Math.min(...preciosPromos);
+          totalCalculado -= descuentoPromo;
+        }
+      } 
+      else if (recompensa_usada.descripcion === 'Cupón Especial VIP') {
         totalCalculado -= 150;
       }
+      
       // Evitamos totales negativos
       totalCalculado = Math.max(0, totalCalculado);
     }
@@ -116,7 +151,6 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
         }
 
         // B) Generar puntos por la compra actual (1 pt x cada $10 gastados)
-        // Usamos Math.floor para redondear hacia abajo (Ej. $19.99 generan 1 punto)
         const puntosGanados = Math.floor(totalCalculado / 10);
 
         if (puntosGanados > 0) {
@@ -135,7 +169,6 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
         const hoy = new Date();
         const ultimaVisita = new Date(perfilLealtad.fecha_ultima_actualizacion);
 
-        // Extraemos cadenas 'YYYY-MM-DD' para comparar únicamente las fechas ignorando la hora
         const fechaHoyString = hoy.toISOString().split('T')[0];
         const ultimaVisitaString = ultimaVisita.toISOString().split('T')[0];
 
@@ -144,7 +177,6 @@ export const realizarPedido = async (req: Request, res: Response): Promise<void>
           perfilLealtad.fecha_ultima_actualizacion = hoy;
         }
 
-        // Guardamos todos los cambios de lealtad en la base de datos
         await perfilLealtad.save();
       }
     }

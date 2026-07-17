@@ -25,6 +25,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
   public subtotalVisual: number = 0;
   public descuentoVisual: number = 0;
   public puntosDisponibles: number = 0;
+  public nivel: string = 'Regular';
   public recompensaAplicada: any = null;
   public clienteLealtadId: string | null = null;
 
@@ -71,9 +72,10 @@ export class ConfirmacionPedidoComponent implements OnInit {
       this.lealtadService.obtenerClientePorId(usuario.id).subscribe({
         next: (data) => {
           this.puntosDisponibles = data.puntos_acumulados;
-          
+          this.nivel = data.nivel_actual;
+
           // LA SOLUCIÓN: Le avisamos a Angular que actualice la vista inmediatamente
-          this.cdr.detectChanges(); 
+          this.cdr.detectChanges();
         },
         error: (err) => console.error('Error al obtener datos de lealtad:', err)
       });
@@ -101,9 +103,9 @@ export class ConfirmacionPedidoComponent implements OnInit {
     this.pedidoService.obtenerProductos().subscribe({
       next: (response) => {
         if (response.success) {
-          
+
           this.catalogoProductos = response.data.filter((p: ProductoCatalogo) => p.stock > 0);
-          
+
           this.articulos.clear();
 
           if (this.articulosPrecargados.length > 0) {
@@ -184,7 +186,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
 
     this.articulos.controls.forEach((control) => {
       const prodId = control.get('productoId')?.value;
-      let cantidad = control.get('cantidad')?.value || 0; 
+      let cantidad = control.get('cantidad')?.value || 0;
 
       const productoEncontrado = this.catalogoProductos.find(p => p._id === prodId);
 
@@ -209,35 +211,47 @@ export class ConfirmacionPedidoComponent implements OnInit {
       }
     });
 
-    this.subtotalVisual = acumulado; 
-    this.descuentoVisual = 0; 
+    this.subtotalVisual = acumulado;
+    this.descuentoVisual = 0;
 
     // Aplicamos el descuento si hay una recompensa seleccionada
     if (this.recompensaAplicada) {
       if (this.recompensaAplicada.descripcion === 'Descuento del 10%') {
-        this.descuentoVisual = acumulado * 0.10; 
+        this.descuentoVisual = acumulado * 0.10;
       }
       else if (this.recompensaAplicada.descripcion === 'Bebida Gratis') {
-        // Buscamos si existe al menos una bebida en el carrito basándonos en la categoría
         const bebidasEnCarrito = nuevosArticulosCarrito.filter((art) => {
-           // NOTA: Asegúrate de que la interfaz 'ProductoCatalogo' incluya la propiedad 'categoria: string;'
-           const prod = this.catalogoProductos.find(p => p._id === art.productoId);
-           return prod && (prod as any).categoria && (prod as any).categoria.toLowerCase() === 'bebidas';
+          const prod = this.catalogoProductos.find(p => p._id === art.productoId);
+
+          //Esto imprimirá la categoría real que llega del backend
+          console.log(`Analizando: ${prod?.nombre} | Categoría detectada: ${(prod as any)?.categoria}`);
+
+          // Si el producto no tiene categoría (undefined), no puede ser una bebida
+          if (!prod || !(prod as any).categoria) return false;
+
+          const categoriaNormalizada = String((prod as any).categoria).toLowerCase();
+          // Usamos includes() para atrapar "bebida", "bebidas", "bebidas calientes", etc.
+          return categoriaNormalizada.includes('bebida');
         });
 
         if (bebidasEnCarrito.length > 0) {
-          // Descontamos exactamente el valor de la bebida más barata agregada
           this.descuentoVisual = Math.min(...bebidasEnCarrito.map(b => b.precio));
         } else {
           alert('Debes agregar al menos una bebida al carrito para usar esta recompensa.');
           this.quitarRecompensa();
-          return; // Salimos para evitar recalcular incorrectamente
+          return;
         }
       }
       else if (this.recompensaAplicada.descripcion === 'Producto Promocional') {
         const promosEnCarrito = nuevosArticulosCarrito.filter((art) => {
-           const prod = this.catalogoProductos.find(p => p._id === art.productoId);
-           return prod && (prod as any).categoria && (prod as any).categoria.toLowerCase() === 'promo';
+          const prod = this.catalogoProductos.find(p => p._id === art.productoId);
+
+          console.log(`Analizando: ${prod?.nombre} | Categoría detectada: ${(prod as any)?.categoria}`);
+
+          if (!prod || !(prod as any).categoria) return false;
+
+          const categoriaNormalizada = String((prod as any).categoria).toLowerCase();
+          return categoriaNormalizada.includes('promo');
         });
 
         if (promosEnCarrito.length > 0) {
@@ -249,17 +263,14 @@ export class ConfirmacionPedidoComponent implements OnInit {
         }
       }
       else if (this.recompensaAplicada.descripcion === 'Cupón Especial VIP') {
-        this.descuentoVisual = 150; 
+        this.descuentoVisual = 150;
       }
     }
 
-    // Evitamos que el total sea negativo
     this.totalVisual = Math.max(0, this.subtotalVisual - this.descuentoVisual);
-
-    // Enviamos el estado actualizado al servicio de forma síncrona
     this.carritoService.sincronizarCarrito(nuevosArticulosCarrito);
   }
-  
+
   public obtenerImagenProducto(idProducto: string): string {
     if (!idProducto) {
       return '';
@@ -310,7 +321,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
     }
 
     const recompensa = this.catalogoRecompensas.find(r => r.descripcion === descripcion);
-    
+
     if (recompensa) {
       // Validamos si tiene los puntos suficientes
       if (this.puntosDisponibles >= recompensa.puntos) {
@@ -327,7 +338,7 @@ export class ConfirmacionPedidoComponent implements OnInit {
     this.recompensaAplicada = null;
     // Volvemos a poner el select en su estado inicial
     const select = document.getElementById('selectRecompensa') as HTMLSelectElement;
-    if(select) select.value = "";
+    if (select) select.value = "";
     this.calcularTotal();
   }
 
@@ -341,6 +352,17 @@ export class ConfirmacionPedidoComponent implements OnInit {
     const payload: any = this.pedidoForm.value; // Cambié a "value" para obtener los datos del formulario, era "Pedido"
     payload.total = this.totalVisual; // Aseguramos que el total enviado sea el calculado en la interfaz
 
+    // Agregamos la categoría a cada artículo antes de enviarlo al backend
+    payload.articulos = payload.articulos.map((articulo: any) => {
+      // Buscamos el producto en el catálogo para extraer su categoría
+      const productoCompleto = this.catalogoProductos.find(p => p._id === articulo.productoId);
+      return {
+        ...articulo,
+        // Si lo encuentra manda la categoría, si no, manda un valor por defecto para evitar el error
+        categoria: productoCompleto ? (productoCompleto as any).categoria : 'General'
+      };
+    });
+
     // Le avisamos al backend si se usó una recompensa para que descuente los puntos
     if (this.recompensaAplicada) {
       payload.recompensa_usada = {
@@ -349,15 +371,15 @@ export class ConfirmacionPedidoComponent implements OnInit {
       };
     }
 
-    
-
     this.pedidoService.crearPedido(payload).subscribe({
       next: (response) => {
-        //alert(`Totlal del pedido: $${response.data.total}`);
-        this.pedidoForm.reset({ clienteId: '',clienteNombre: '', notas: '' });
+        //alert(`Total del pedido: $${response.data.total}`);
+        this.recompensaAplicada = null;
+        this.descuentoVisual = 0;
+        this.pedidoForm.reset({ clienteId: '', clienteNombre: '', notas: '' });
         this.articulos.clear();
         this.agregarArticulo();
-        
+
         this.router.navigate(['cliente/misPedidos']);
       },
       error: (error) => {

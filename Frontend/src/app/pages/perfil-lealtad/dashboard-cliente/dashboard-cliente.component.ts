@@ -14,6 +14,8 @@ export class DashboardClienteComponent implements OnInit { // <-- Implementamos 
 
   private lealtadService = inject(LealtadService);
   private authService = inject(AuthService); // <-- Inyectamos el servicio de autenticación
+  public usuario: any = this.authService.obtenerUsuario(); // <-- Obtenemos el usuario logueado al iniciar el componente
+
 
   clienteData = signal<ILealtadFrontend | null>(null);
   isLoading = signal<boolean>(false);

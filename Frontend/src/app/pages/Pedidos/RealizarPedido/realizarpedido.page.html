@@ -105,18 +105,22 @@
               <!-- Cuando este lo de perla hay que cambiar esta seccion para obtener el nombre del cliente en base a la base de datos -->
             </div>
 
-            
+            @if (puntosDisponibles > 19 ) {
             <div class="mb-4  bg-turquesa/10 rounded-xl">
               <label class="block text-sm font-bold text-marca-azul">Canjear Recompensa (Pts: {{ puntosDisponibles }})</label>
               <select (change)="aplicarRecompensa($event)" class="w-full mt-1 p-2 border rounded-lg">
                 <option value="">Selecciona una opción</option>
                 <option value="Bebida Gratis">Bebida Gratis (20 pts)</option>
-                <option value="Descuento del 10%">Descuento del 10% (50 pts)</option>
-                <option value="Articulo promocional">Artículo promocional (100 pts)</option>
-                <option value="Cupón VIP">Cupón VIP (150 pts)</option>
+                @if (puntosDisponibles > 49 ) {
+                <option value="Descuento del 10%">Descuento del 10% (50 pts)</option>}
+                @if (puntosDisponibles > 99 && (nivel === 'Frecuente' || nivel === 'VIP')) {
+                <option value="Producto Promocional">Artículo Promocional (100 pts)</option>}
+                @if (puntosDisponibles > 149 && nivel === 'VIP') {
+                <option value="Cupón Especial VIP">Cupón Especial VIP (150 pts)</option>
+                }
               </select>
             </div>
-          
+            }
 
             <div>
               <label class="block text-sm font-bold mb-1 text-marca-azul">Notas adicionales:</label>

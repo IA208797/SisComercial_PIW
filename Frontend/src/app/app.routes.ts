@@ -11,6 +11,8 @@ import { ConfirmacionPedidoComponent } from './pages/Pedidos/RealizarPedido/real
 import { Login } from './pages/usuario/login/login';
 import { Registro } from './pages/usuario/registro/registro';
 import { Perfil } from './pages/usuario/perfil/perfil';
+import {TerminosCondicionesComponent }from './pages/legal/tyc/terminos-condiciones.page';
+import { PoliticaPrivacidadComponent } from './pages/legal/privacidad/politica-privacidad.page';
 import { authGuard } from './guards/auth.guard';
 import { adminGuard } from './guards/admin.guards';
 
@@ -85,7 +87,19 @@ export const routes: Routes = [
       },
     ]
   },
-
+  {
+    path: 'legal',
+    children: [
+      {
+        path: 'terminos-condiciones',
+        component: TerminosCondicionesComponent
+      },
+      {
+        path: 'politica-privacidad',
+        component: PoliticaPrivacidadComponent
+      }
+    ]
+  },
 
   // ==============================
   // MÓDULO USUARIOS

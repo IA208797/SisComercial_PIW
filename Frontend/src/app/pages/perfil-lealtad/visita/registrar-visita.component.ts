@@ -11,6 +11,7 @@ import { NgClass } from "../../../../../node_modules/@angular/common/types/_comm
 })
 export class RegistrarVisitaComponent {
   private lealtadService = inject(LealtadService);
+  public generarTicket = signal<boolean>(false);
 
   datosVisita = {
     cliente_id: '',
@@ -62,6 +63,8 @@ export class RegistrarVisitaComponent {
     });
   }
 
-  // registrarVisita(): void {}
+  public toggleGenerarTicket(): void {
+    this.generarTicket.update(valorActual => !valorActual);
+  }
 
 }
