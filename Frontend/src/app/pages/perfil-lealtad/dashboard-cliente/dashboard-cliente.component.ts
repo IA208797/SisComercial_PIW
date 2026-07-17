@@ -11,16 +11,16 @@ import { DatePipe, LowerCasePipe } from '@angular/common';
   templateUrl: './dashboard-cliente.component.html'
 })
 export class DashboardClienteComponent implements OnInit { // <-- Implementamos la interfaz OnInit
-  
+
   private lealtadService = inject(LealtadService);
   private authService = inject(AuthService); // <-- Inyectamos el servicio de autenticación
 
   clienteData = signal<ILealtadFrontend | null>(null);
   isLoading = signal<boolean>(false);
   errorMensaje = signal<string | null>(null);
-  
+
   // Señal extra para saber si cargó por sesión o si es una búsqueda manual
-  busquedaManual = signal<boolean>(true); 
+  busquedaManual = signal<boolean>(true);
 
   catalogoRecompensas = [
     { descripcion: 'Bebida Gratis', puntos: 20 },
@@ -35,13 +35,21 @@ export class DashboardClienteComponent implements OnInit { // <-- Implementamos 
 
     console.log("Datos encontrados en localStorage:", usuarioLogueado);
 
-    // Si hay un usuario en sesión, extraemos su identificador (revisa si tu backend manda '_id', 'id' o 'telefono')
-    if (usuarioLogueado && usuarioLogueado.id) { 
-      this.busquedaManual.set(false); // Ocultamos el buscador manual
-      this.buscarCuenta(usuarioLogueado.id); // Disparamos la búsqueda automáticamente
-    }else {
-    console.warn("No se encontró usuario o no tiene ID para buscar.");
-  }
+    if (usuarioLogueado.rol == 'admin') {
+
+    }
+    else {
+      // Si hay un usuario en sesión, extraemos su identificador (revisa si tu backend manda '_id', 'id' o 'telefono')
+      if (usuarioLogueado && usuarioLogueado.id) {
+        this.busquedaManual.set(false); // Ocultamos el buscador manual
+        this.buscarCuenta(usuarioLogueado.id); // Disparamos la búsqueda automáticamente
+      } else {
+        console.warn("No se encontró usuario o no tiene ID para buscar.");
+      }
+
+    }
+
+
   }
 
   buscarCuenta(id: string) {
@@ -63,7 +71,7 @@ export class DashboardClienteComponent implements OnInit { // <-- Implementamos 
         this.errorMensaje.set('No se encontró ninguna cuenta con ese ID o Teléfono.');
         this.isLoading.set(false);
         // Si falló la búsqueda automática, volvemos a mostrar el input manual por si acaso
-        this.busquedaManual.set(true); 
+        this.busquedaManual.set(true);
       }
     });
   }
